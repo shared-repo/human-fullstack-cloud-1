@@ -1,5 +1,5 @@
 
-public class IfStatement02 {
+public class SwitchStatement03 {
 
 	public static void main(String[] args) {
 		
@@ -54,21 +54,24 @@ public class IfStatement02 {
 		// 4.
 		char grade = '_';
 		boolean valid = true;
-		if ( 90 <= average && average <= 100 ) {
-			grade = 'A';
-		} else if (average >= 80 && average < 90) {
-			grade = 'B';
-		} else if (average >= 70 && average < 80) {
-			grade = 'C';
-		} else if (average >= 60 && average < 70) {
-			grade = 'D';
-		} else if (average >= 0 && average < 60) {
-			grade = 'F';
-		} else { // 100보다 크거나 0보다 작은 경우
-			System.out.println("잘못된 데이터");
-			valid = false;
-		}
-				
+//		switch ((int)average / 10) {
+//		case 9, 10:	grade = 'A'; break;
+//		case 8: grade = 'B'; break;
+//		case 7: grade = 'C'; break;
+//		case 6: grade = 'D'; break;
+//		case 5, 4, 3, 2, 1, 0: grade = 'F'; break;
+//		default: valid = false;
+//		}		
+		
+		switch ((int)average / 10) {
+		case 9, 10 -> grade = 'A';
+		case 8 -> grade = 'B';
+		case 7 -> grade = 'C';
+		case 6 -> grade = 'D';
+		case 5, 4, 3, 2, 1, 0 -> grade = 'F';
+		default -> valid = false;
+		}		
+		
 		if (valid) {
 			System.out.printf("등급 : %c", grade);
 		}
