@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>HTML DOM</title>
+    <style>
+        h1, div { text-align: center; }
+    </style>
+</head>
+<body>
+    <h1>행운의 숫자</h1>
+    <div></div>
+    <script>
+        // 1. 행운의 숫자 뽑기 (랜덤 숫자) -> 변수에 저장
+        let number = (Math.random() * 777) + 1;
+        number = Math.floor(number); // 내림 : 소숫점 이하 제거
+        console.log(number); // 테스트 출력
+        // 2-1. div 찾기
+        const div = document.querySelector("div"); // <div> 요소 찾기
+        // 2-2. div 사용 (여기서는 뽑힌 숫자 표시)
+        div.innerHTML = number; // innerHTML : <div>innerHTML</div>
+        div.style.color = "red"; // <div style="color:red"
+        div.style.fontSize = "25pt";
+        div.style.fontWeight = "bold";
+        div.style.textDecoration = "underline";
+    </script>
+</body>
+</html>

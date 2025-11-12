@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>HTML DOM</title>
+    <style>        
+    </style>
+</head>
+<body>
+    <div>
+    </div>
+    <script>
+        // 1. div 찾기
+        const div = document.querySelector("div");
+
+        // 2. div 사용 ( 배경색 랜덤 처리 )
+        let r = Math.random() * 256;
+        r = Math.floor(r); // 0 ~ 255
+        let g = Math.floor( Math.random() * 256 );
+        let b = Math.floor( Math.random() * 256 );
+        div.style.width = '300px';
+        div.style.height = '300px';
+        div.style.margin = "100px auto";
+        //div.style.backgroundColor = "rgb(" + r + "," + g + ", " + b + ")"; // rgb(r,g,b)
+        div.style.backgroundColor = `rgb(${r}, ${g}, ${b})`; // rgb(r,g,b)
+
+        div.innerHTML = div.style.backgroundColor; // <div>innerHTML</div>
+        div.style.textAlign = 'center';     // 좌우 정렬
+        div.style.alignContent = 'center';  // 상하 정렬
+
+    </script>
+</body>
+</html>

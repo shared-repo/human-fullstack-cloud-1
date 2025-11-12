@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>HTML DOM</title>
+    <style>        
+    </style>
+</head>
+<body>
+    <div id="user">
+        <img>
+    </div>
+    <div id="computer">
+        <img>
+    </div>
+    <script>
+        // 1. 사용자 입력 (1, 2, 3) - prompt        
+        const userNo = prompt("1, 2, 3 중의 한 가지 숫자를 입력하세요"); 
+        console.log( typeof userNo );  // prompt 입력의 결과는 문자열
+
+        // 2. 입력 받은 값을 user div 하위에 있는 img에 이미지 출력
+        //    1 : 가위, 2 : 바위, 3 : 보 
+        const userImg = document.querySelector('#user img');
+        userImg.style.width = '150px';
+        if (userNo == "1") { // java에서는 equals
+            userImg.src = 'images/scissors.png';
+        } else if (userNo == "2") {
+            userImg.src = 'images/rock.png';
+        } else {
+            userImg.src = 'images/paper.png';
+        }
+
+        // 3. 1, 2, 3 중에서 random number 뽑기
+        const computerNo = Math.floor(Math.random() * 3 + 1);
+        const computerImg = document.querySelector('#computer img');
+        console.log( typeof computerNo );
+        
+        // 4. random number에 따라 computer 하위의 img에 이미지 표시
+        //    1 : 가위, 2 : 바위, 3 : 보
+        computerImg.style.width = '150px';
+        if (computerNo == "1") {
+            computerImg.src = 'images/scissors.png';
+        } else if (computerNo == "2") {
+            computerImg.src = 'images/rock.png';
+        } else {
+            computerImg.src = 'images/paper.png';
+        }
+
+        // 5. userNo와 computerNo를 비교해서 승, 무, 패 결정 -> 변수에 저장
+
+        // 6. 승, 무, 패에 따라 이미지 표시
+        //    승 : win.png, 패 : lose.png, 무 : draw.png
+        
+    </script>
+</body>
+</html>
