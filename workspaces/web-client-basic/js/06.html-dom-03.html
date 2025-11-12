@@ -38,9 +38,10 @@
         // 4. random number에 따라 computer 하위의 img에 이미지 표시
         //    1 : 가위, 2 : 바위, 3 : 보
         computerImg.style.width = '150px';
-        if (computerNo == "1") {
+        // if (computerNo == "1") { // 자료형이 달라도 값만 비교
+        if (computerNo === 1) { // 자료형과 값을 모두 비교
             computerImg.src = 'images/scissors.png';
-        } else if (computerNo == "2") {
+        } else if (computerNo === 2) {
             computerImg.src = 'images/rock.png';
         } else {
             computerImg.src = 'images/paper.png';
