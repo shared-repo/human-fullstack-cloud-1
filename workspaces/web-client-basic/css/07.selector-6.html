@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>선택자 6</title>
+    <style>
+        .container :first-child {
+            background-color: rgb(255, 165, 0);
+        }
+        .container :last-child {
+            background-color: #2cf; 
+        }
+        .container div:only-child {
+            background-color: #f0c8fc;
+        }
+
+        table { width: 500px; margin: 0 auto; }
+        tr { height: 35px }
+        tr:nth-child(2n+1) { background-color: lightblue; }
+
+        img {
+            transform: rotate(30deg);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <p>첫 번째</p>
+        <div>두 번째</div>
+        <p>세 번째</p>
+        <div>네 번째</div>
+    </div>
+    <div class="container">
+        <div>혼자~</div>
+    </div>
+
+    <hr>
+
+    <table border="1">
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+    </table>
+
+    <img src="images/nature1.jpg" width="400">
+
+
+</body>
+
+</html>
