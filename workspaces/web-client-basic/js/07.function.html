@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>함수</title>
+</head>
+<body>
+    
+    <script>
+        function drawBox() {
+            document.write("<table>");
+            for (let row = 0; row < 10; row++) {
+                document.write("<tr>");
+    			for (let col = 0; col < 10; col++) {
+    				if (row == 0 || row == 9 || col == 0 || col == 9) {
+    					document.write("<td>*</td>");
+    				} else {
+    					document.write("<td>&nbsp;</td>"); // &nbsp; -> space를 표시하는 기호
+    				}
+    			}
+    			document.write("</tr>");
+    		}
+            document.write("</table>");
+        }        
+        drawBox();
+        drawBox();
+    </script>
+</body>
+</html>

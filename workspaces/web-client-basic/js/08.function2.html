@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>함수</title>
+</head>
+<body>
+    
+    <script>
+        function drawBox(width = 20, height = 10) {
+            document.write("<table>");
+            for (let row = 0; row < height; row++) {
+                document.write("<tr>");
+    			for (let col = 0; col < width; col++) {
+    				if (row == 0 || row == height-1 || col == 0 || col == width-1) {
+    					document.write("<td>*</td>");
+    				} else {
+    					document.write("<td>&nbsp;</td>"); // &nbsp; -> space를 표시하는 기호
+    				}
+    			}
+    			document.write("</tr>");
+    		}
+            document.write("</table>");
+        }
+        function inputDigit(message) {
+            let digit = prompt(message);
+            digit = parseInt(digit);
+            return digit;
+        }
+        function exec() {
+            const width = inputDigit("박스의 너비");
+            const height = inputDigit("박스의 높이");
+            drawBox(width, height); // drawBox는 전달한 width, height 사용
+            // drawBox(); // drawBox는 기본 값 20, 10 사용
+        }
+        exec();
+        
+    </script>
+</body>
+</html>

@@ -4,24 +4,33 @@
     <meta charset="UTF-8">
     <title>선택자 1</title>
     <style>
+        /* * : 모든 요소 */
         * {
             text-align: center;
         }
+        /* tag 선택자 : tag 이름으로 대상 지정 */
         p {
             color: red;
         }
         div {
             color: orange;
         }
+
+        /* class 선택자 : tag의 class 속성 값으로 대상 지정 */
         .myclass {
             font-size: 15pt;
         }
+
+        /* id 선택자 : tag의 id 속성 값으로 대상 지정 */
         #myp {
             font-weight: bold;
         }
+        /* 목록 선택자 : 여러 개의 선택자를 한 번에 지정 */
         .myclass, h3 {
             text-decoration: underline;
         }
+
+        /* p 태그 중에서 class="myclass"인 요소 */
         p.myclass {
             background-color: aquamarine;
         }
