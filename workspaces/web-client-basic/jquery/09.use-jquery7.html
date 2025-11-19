@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">    
+    <title>애니메이션</title>
+</head>
+<body>
+
+    <button id="btn1">보여주세요</button>
+    <button id="btn2">숨겨주세요</button>
+    <button id="btn3">Animate</button>
+    <hr>
+    <div>
+        <img id="nature1" src="images/nature1.jpg" alt="">
+    </div>
+
+    <script src="js/jquery-3.7.1.js"></script>
+    <script>
+        $(() => {
+            $('#btn1').on('click', (event) => {
+                // $('#nature1').fadeIn(3000, () => {})
+                $('#nature1').slideDown(3000, () => {})
+            });
+            $('#btn2').on('click', (event) => {
+                // $('#nature1').fadeOut(3000, () => {})
+                $('#nature1').slideUp(3000, () => {})
+            });
+            $('#btn3').on('click', (event) => {
+                $('#nature1').css({
+                                    'display':'block',
+                                    'opacity': 1,
+                                    'width': "0px",
+                                    'position': "absolute"
+                              })
+                             .animate({
+                                    "opacity": 0.3,
+                                    "width": 400,
+                                    "left": "+=50",
+                                    "top": "+=50",
+                                    "rotate":"+=30deg"
+                              }, 2000)
+            });
+
+        });
+    </script>
+    
+</body>
+</html>

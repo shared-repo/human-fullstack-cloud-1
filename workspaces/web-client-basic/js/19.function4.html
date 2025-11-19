@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>함수</title>
+</head>
+<body>
+
+    <button id="btn-a">버튼 A</button>
+    <button id="btn-b">버튼 B</button>
+    <button id="btn-c">버튼 C</button>
+
+    <script>
+
+        function clickHandler(event) {
+            alert('눌러주셔서 감사합니다.')
+        }
+        const btnA = document.querySelector('#btn-a');
+        btnA.addEventListener('click', clickHandler);
+
+        const btnB = document.querySelector('#btn-b');
+        btnB.addEventListener('click', function(event) { 
+            alert('눌러주셔서 감사합니다. 2'); 
+        });
+
+        const btnC = document.querySelector('#btn-c');
+        btnC.addEventListener(  'click', 
+                                (event) => alert('눌러주셔서 감사합니다. 3') );
+
+    </script>
+</body>
+</html>

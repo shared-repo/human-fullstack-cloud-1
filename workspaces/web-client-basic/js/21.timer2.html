@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">    
+    <title>타이머</title>
+</head>
+<body>
+    <button id="btn-start">타이머 시작</button>
+    <button id="btn-stop">타이머 중지</button>
+    <hr>
+    <div id="message"></div>
+    
+    <script>
+        const message = document.querySelector('#message');
+        const btnStart = document.querySelector("#btn-start");
+        const btnStop = document.querySelector("#btn-stop");
+
+        function showTime() {
+            // 익명함수를 1초 후에 한 번 호출
+            timerId = window.setTimeout(function() {
+                message.innerHTML = `<h3>${ new Date() }</h3>`;
+                if (true) {
+                    showTime();
+                }
+            }, 1000);
+        }
+        let timerId = null;
+        btnStart.addEventListener("click", (event) => {
+            if (timerId != null) { // 현재 실행 중인 타이머가 있다면
+                return; // 함수 실행 종료
+            }
+            showTime();
+            
+        });
+        btnStop.addEventListener("click", (event) => {
+            // setTimeout으로 시작된 타이머를 중지
+            window.clearTimeout(timerId);
+            timerId = null;
+        });
+
+
+        
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>HTML 요소 만들기</title>
+    <style>
+        table { margin: 0 auto; }
+        td { 
+            width: 70px; 
+            height: 70px; 
+            border: solid 1px black;
+            font-size: 15pt; 
+            font-weight: bold; 
+            text-align: center; 
+        }
+        button { width: 100%; height: 100%; font-size: 15pt; font-weight: bold; color: red; }
+    </style>
+</head>
+<body>
+    <script src="js/jquery-3.7.1.js"></script>
+    <script>
+        $(() => {
+            // 새 html요소 만들기 (여기서는 table)
+            const table = $('<table></table>');
+
+            const tr1 = $('<tr></tr>');
+            
+                const td = $('<td></td>').attr('colspan', 6);
+            
+                    const button = $('<button></button>').attr("id", 'btn-select-number')
+                                                        .html("당첨 예상 번호 뽑기");
+                // td.append(button); // append : 자식을 추가
+                button.appendTo(td); // appendTo : 부모에 추가 
+
+            tr1.append(td);
+
+            const tr2 = $('<tr id="numbers-row"></tr>');
+
+                for(let i = 0; i < 6; i++) {
+                    const td = $('<td></td>');
+                    tr2.append(td);    
+                }
+
+            table.append(tr1);
+            table.append(tr2);
+
+            $('body').append(table);
+
+            ////////////////////////////////////////////////////////////////////
+
+            $('#btn-select-number').on('click', (event) => {
+                const numbers = [];
+                for (let i = 0; i < 6; i++) {
+                    const number = Math.floor(Math.random() * 45 + 1);
+                    numbers.push(number);
+                }
+
+                numbers.sort( (v1, v2) => v1 - v2 );
+
+                // jQuery의 each -> javascript forEach와 같은 기능
+                $('#numbers-row td').each( (idx, td) => {
+                    $(td).html(numbers[idx]);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>jQuery 사용</title>
+</head>
+<body>
+
+    <div id="message"></div>
+
+    <!-- 직접 다운로드해서 사용하는 방법 -->
+    <!-- <script src="js/jquery-3.7.1.js"></script> -->
+    <!-- CDN 사용 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.js"></script>
+    
+    <script>
+        // vanilla script
+        // const message = document.querySelector("#message");
+        // message.innerHTML = `<h3>${new Date()}</h3>`;
+
+        // jQuery
+        const message = $('#message');
+        message.html(`<h3>${new Date()}</h3>`);
+    </script>
+    
+</body>
+</html>

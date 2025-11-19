@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>history object</title>
+</head>
+<body>
+    <button id="btn-prev">이전</button>
+    <button id="btn-next">다음</button>
+
+    <script>
+        const btnNext = document.querySelector('#btn-next');
+        const btnPrev = document.querySelector('#btn-prev');
+
+        btnNext.addEventListener('click', (event) => {
+            // history.forward();
+            history.go(1);
+        });
+        btnPrev.addEventListener('click', (event) => {
+            // history.back();
+            history.go(-1);
+        });
+
+    </script>
+    
+</body>
+</html>

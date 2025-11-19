@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>함수</title>
+</head>
+<body>
+
+    <script>
+        function f() {
+            alert('함수 f가 호출되었습니다.');
+        }
+
+        // 1. 
+        f();
+
+        // 2. 
+        const fc = f; // 함수는 변수에 저장할 수 있습니다. 이 때부터 변수는 함수가 됩니다.
+        fc();
+         
+        function executor(fp) { 
+            fp();
+        }
+        // 3.
+        executor(f); // 함수는 전달인자에 전달할 수 있습니다.
+
+        // 4. 익명 함수 ( 전달인자로 전달하거나 변수에 저장하는 용도 )
+        const fc2 = function() { alert('익명 함수가 호출되었습니다.'); }
+        fc2();
+
+        // 5. 화살표 함수 ( 전달인자로 전달하거나 변수에 저장하는 용도 )
+        const fc3 = () => alert('화살표 함수가 호출되었습니다.');
+        fc3();
+        //
+        function compareNumber(v1, v2) {
+            // v1이 크면 양수 반환, v1이 작으면 음수 반환, 같으면 0 반환
+            return parseFloat(v1) - parseFloat(v2);
+            // return v1 - v2;
+        }
+        const ar = [1, 23, 9, 125, 42, 37, 68];
+        alert(ar);
+        // ar.sort(); // 기본 정렬 방식은 데이터를 문자열로 변환해서 정렬
+        // ar.sort(compareNumber);
+        // ar.sort( function(v1, v2) { return v1 - v2; } );
+        ar.sort( (v1, v2) => v1 - v2 );
+        alert(ar);
+
+
+    </script>
+</body>
+</html>

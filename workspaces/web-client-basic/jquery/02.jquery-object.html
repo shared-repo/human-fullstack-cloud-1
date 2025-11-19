@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>jQuery 객체</title>
+</head>
+<body>
+    
+    <script src="js/jquery-3.7.1.js"></script>
+    <script>
+        // 1. 문서 준비가 완료된 후(HTML 처리가 완료된 후) 발생하는 이벤트
+        // window.addEventListener('load', (event) => { 
+        //     // jQuery의 모든 기능은 jQuery 객체에 포함  
+        //     const message = jQuery('#message');
+        //     message.html(`<h3>${new Date()}</h3>`);
+
+        //     // jQuery 객체 대신 $ 사용 가능
+        //     const message2 = $('#message2');
+        //     message2.html(`<h3>${new Date()}</h3>`);
+        // });
+
+        // 2. DOM 객체 트리의 구조와 기본 내용이 준비된 후 발생하는 이벤트
+        // document.addEventListener('DOMContentLoaded', (event) => { 
+        //     // jQuery의 모든 기능은 jQuery 객체에 포함  
+        //     const message = jQuery('#message');
+        //     message.html(`<h3>${new Date()}</h3>`);
+
+        //     // jQuery 객체 대신 $ 사용 가능
+        //     const message2 = $('#message2');
+        //     message2.html(`<h3>${new Date()}</h3>`);
+        // });
+
+        // 3. 2와 비슷한 효과
+        // $(document).ready(() => { 
+        $(() => {
+            // jQuery의 모든 기능은 jQuery 객체에 포함  
+            const message = jQuery('#message');
+            message.html(`<h3>${new Date()}</h3>`);
+
+            // jQuery 객체 대신 $ 사용 가능
+            const message2 = $('#message2');
+            message2.html(`<h3>${new Date()}</h3>`);
+        });
+        
+    </script>
+
+    <div id="message"></div>
+    <div id="message2"></div>
+
+    
+</body>
+</html>

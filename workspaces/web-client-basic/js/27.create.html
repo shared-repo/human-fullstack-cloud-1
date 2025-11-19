@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>HTML 요소 만들기</title>
+    <style>
+        table { margin: 0 auto; }
+        td { 
+            width: 70px; 
+            height: 70px; 
+            border: solid 1px black;
+            font-size: 15pt; 
+            font-weight: bold; 
+            text-align: center; 
+        }
+        button { width: 100%; height: 100%; font-size: 15pt; font-weight: bold; color: red; }
+    </style>
+</head>
+<body>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // 새 html요소 만들기 (여기서는 table)
+            const table = document.createElement('table');
+
+            const tr1 = document.createElement('tr');
+            
+                const td = document.createElement('td');
+                td.setAttribute("colspan", 6);
+            
+                    const button = document.createElement('button');
+                    button.setAttribute('id', 'btn-select-number');
+                    button.innerHTML = "당첨 예상 번호 뽑기";
+
+                td.appendChild(button);
+
+            tr1.appendChild(td);
+
+            const tr2 = document.createElement('tr');
+            tr2.setAttribute("id", "numbers-row");
+
+                for(let i = 0; i < 6; i++) {
+                    const td = document.createElement('td');
+                    tr2.appendChild(td);    
+                }
+
+            table.appendChild(tr1);
+            table.appendChild(tr2);
+
+            document.body.appendChild(table);
+
+            ////////////////////////////////////////////////////////////////////
+
+            function ascending(v1, v2) {
+                return v1 - v2; // 양수를 반환하면 앞의 값이 큰 값, 0이면 같은 값, 음수이면 뒤의 값이 큰 값
+            }
+            function descending(v1, v2) {
+                return v2 - v1; // 양수를 반환하면 앞의 값이 큰 값, 0이면 같은 값, 음수이면 뒤의 값이 큰 값
+            }
+            function selectNumber(event) {
+                // 1. 6개의 값을 저장하는 배열 만들기            
+                // 2. 배열의 각 요소에 1 ~ 45 범위의 random 숫자 저장
+                const numbers = [];
+                for (let i = 0; i < 6; i++) {
+                    const number = Math.floor(Math.random() * 45 + 1);
+                    // numbers.push(number); // 배열의 끝에 새 값을 추가
+                    numbers.unshift(number); // 배열의 앞에 새 값을 추가                
+                }
+                // numbers.sort(); // 배열 정렬 ( 데이터를 문자열로 변경해서 정렬 ) "11" > "2"
+                numbers.sort(descending); // 전달인자에 제공된 함수를 사용해서 정렬
+
+                // 3. 번호를 표시할 td 모두 가져오기 -> 배열에 저장
+                const tds = document.querySelectorAll('#numbers-row td');
+
+                // 4. 반복문을 사용해서 뽑힌 각 번호를 찾아온 각 td에 표시하기 : 예를 들면,  td[i].innerHTML에 numbers[i]
+                for (let i = 0; i < 6; i++) {
+                    tds[i].innerHTML = numbers[i];
+                }
+            }
+            const btnSelectNumber = document.querySelector('#btn-select-number');
+            btnSelectNumber.addEventListener("click", selectNumber);
+        });
+    </script>
+</body>
+</html>

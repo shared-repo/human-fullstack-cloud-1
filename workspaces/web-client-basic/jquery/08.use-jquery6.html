@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">    
+    <title>요소 추가 / 제거</title>
+</head>
+<body>
+    <button id="btn-add">요소 추가</button>
+    <button id="btn-remove">요소 제거</button>
+    <hr>
+    <div id="container"></div>
+
+    <script src="js/jquery-3.7.1.js"></script>
+    <script>
+        $(() => {
+
+            const container = $('#container');
+
+            $('#btn-add').on('click', (event) => {
+                $('<div></div>').html(new Date())
+                                .css({'border':'solid 1px blue',
+                                      'margin': '5px',
+                                      'padding': '5px'})
+                                .appendTo(container);
+            });
+
+            $('#btn-remove').on('click', (event) => {
+                // $('#container div:first-child').remove();
+                // $('#container div:nth-child(1)').remove();
+                $('#container div:eq(0)').remove();
+            });
+        });
+    </script>
+    
+</body>
+</html>
