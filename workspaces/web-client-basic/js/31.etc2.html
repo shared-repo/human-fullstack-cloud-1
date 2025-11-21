@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>기타</title>
+</head>
+<body>
+    
+    <script>
+        // function sum(a, b) { return a + b; }
+        // function sum(a, b, c) { return a + b + c; }        
+        // function sum(a, b, c = 0) { return a + b + c; }
+
+        // function sum(...numbers) { // ... : rest parameter : 갯수를 지정하지 않고 전달인자 사용
+        function sum(n1, n2, ...numbers) {
+            if (!n1 || !n2) {
+                return '적어도 2개의 전달인자가 필요합니다.';
+            }
+            let total = n1 + n2;
+            numbers.forEach( (n) => {
+                total += n;
+            } );
+            return total;
+        }
+
+        document.write( `<h3>${ sum(10, 20, 30) }</h3>` );
+        document.write( `<h3>${ sum(10, 20, 30, 40, 50, 60) }</h3>` );
+        document.write( `<h3>${ sum(10, 20, 30, 90, 45, 55, 78, 12) }</h3>` );
+
+        document.write( `<h3>${ sum() }</h3>` );
+
+        ////////////////////////////////////////////////
+
+        const ar = [1, 2, 3, 4, 5, 6, 7];
+        
+        document.write( `<h3>${ sum(ar) }</h3>` );
+        // document.write( `<h3>${ sum(ar[0], ar[1], ar[2], ar[3], ar[4], ar[5], ar[6]) }</h3>` );
+        document.write( `<h3>${ sum(...ar) }</h3>` ); // ... : spread : 배열을 풀어서 낱개의 값으로 해체
+
+        
+    </script>
+</body>
+</html>

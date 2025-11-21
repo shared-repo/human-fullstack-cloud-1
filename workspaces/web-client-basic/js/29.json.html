@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>JSON</title>
+</head>
+<body>
+    
+    <script>
+        const person = {
+            name: "이재훈",
+            age: 35,
+            email: ['ljh@example.com', 'ljh@naver.com'],
+            "phone": {
+                "office": "02-5689-1245",
+                "mobile": "010-5287-1136"
+            },
+            info : function() {
+                return `[${this.name}][${this.email}][${this.phone.office}, ${this.phone.mobile}]`;
+            }
+        }
+
+        document.write(person.info());
+    </script>
+</body>
+</html>
