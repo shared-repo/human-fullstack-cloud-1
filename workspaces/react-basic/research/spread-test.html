@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+        const person = {
+            name: "홍길동",
+            email: "hkd@example.com",
+            phone: "010-6522-8874"
+        };
+
+        // const person2 = person;
+        // person2.gender = "남"
+
+        const person2 = { ...person, gender:"남" };
+
+        console.log(person2);
+
+    </script>
+
+</body>
+</html>
