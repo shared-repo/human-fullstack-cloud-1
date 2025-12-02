@@ -1,16 +1,13 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import TodoEditor from "./components/TodoEditor"
 import TodoHeader from "./components/TodoHeader"
 import TodoList from "./components/TodoList"
 
 function App() {
 
-  const initData: Todo[] = [
-    // {id:1, title:'쉬는 시간에 쉬기', done:false},
-    // {id:2, title:'간식 먹기', done:false},
-    // {id:3, title:'주말에 전시회 보기', done:false},
-  ]
-  const [todos, setTodos] = useState<Todo[]>(initData)
+  const strTodos = localStorage.getItem('todos');
+  const tempTodos:Todo[] = strTodos ? JSON.parse(strTodos) : []; // JSON.parse : string -> JSON Object
+  const [todos, setTodos] = useState<Todo[]>(tempTodos);
 
   const addTodo = (title:string) => {
     const todo = { id: new Date().getTime(), title: title, done: false }
@@ -27,6 +24,11 @@ function App() {
     const tempTodos = todos.filter( (todo) => todo.id !== id )
     setTodos(tempTodos)
   }
+
+  useEffect( () => {
+    const strTodos = JSON.stringify(todos);// JSON.stringify : JSON Object -> string
+    localStorage.setItem('todos', strTodos);
+  }, [todos]);
 
   return (
     <div className="todo">
