@@ -1,12 +1,14 @@
+import { useTodoStore } from "../store/TodoStore";
 import Button from "./html/Button";
 import CheckBox from "./html/CheckBox";
 import SvgClose from "./svg/SvgClose";
 import SvgPencil from "./svg/SvgPencil";
 
-export default function TodoListItem(
-  props:{todo:Todo, toggleTodoState:(id:number) => void, deleteTodo:(id:number) => void}) {
+export default function TodoListItem(prop: { todo: Todo }) {
 
-  const { todo, toggleTodoState, deleteTodo } =  props
+  const { todo } = prop;
+  const toggleTodoState = useTodoStore( (store) => store.toggleTodoState );
+  const deleteTodo = useTodoStore( (store) => store.deleteTodo );
 
   return (
     <li className={`todo__item ${ todo.done && 'todo__item--complete' }`}>

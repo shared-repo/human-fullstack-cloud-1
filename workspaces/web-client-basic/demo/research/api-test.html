@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test</title>
+</head>
+<body>
+
+    <h1 style="text-align: center;margin-top:25px">Open API 테스트 페이지</h1>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script>
+        $(function() {
+
+            function testA() {
+
+                const url = "http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytListInfoInqire"
+                const serviceKey = "R%2BBEwJ49XVmTutdoCAdNq4m7wjOsdFNhVtlzkxWVeZJPhwQqWbGcD7CNeQPipFzIWAanQVw%2FrPLsGkfcYvD4AQ%3D%3D"
+                const q0="서울특별시";
+                const q1="강남구";
+                const numOfRows = 30;
+
+                fetch(`${url}?serviceKey=${serviceKey}&Q0=${q0}&Q1=${q1}&numOfRows=${numOfRows}`)
+                    .then( response => response.text() )
+                    .then( text => {
+                        console.log(text);
+                        const parser = new DOMParser(); // xml string -> 객체 트리 변환기
+                        const xmlDoc = parser.parseFromString(text, "application/xml"); // 변환 실행
+                        const items = xmlDoc.querySelectorAll('items item');
+                        console.log(typeof items);
+                        console.log(items);
+                        items.forEach( (v, i) => console.log(v.textContent))
+                    });
+            }
+            // testA();
+
+            function testB() {
+                const url = "http://apis.data.go.kr/B552657/ErmctInsttInfoInqireService/getParmacyListInfoInqire"
+                const serviceKey = "R%2BBEwJ49XVmTutdoCAdNq4m7wjOsdFNhVtlzkxWVeZJPhwQqWbGcD7CNeQPipFzIWAanQVw%2FrPLsGkfcYvD4AQ%3D%3D"
+                // const serviceKey = "R+BEwJ49XVmTutdoCAdNq4m7wjOsdFNhVtlzkxWVeZJPhwQqWbGcD7CNeQPipFzIWAanQVw/rPLsGkfcYvD4AQ==";
+                const q0="서울특별시";
+                const q1="강남구";
+                const numOfRows = 30;
+
+                fetch(`${url}?serviceKey=${serviceKey}&Q0=${q0}&Q1=${q1}&numOfRows=${numOfRows}`)
+       
+            }
+            //testB();
+
+            function testC() {
+                // const url = "http://apis.data.go.kr/B551182/hospInfoService1/getHospBasisList1?pageNo=1&numOfRows=10&_type=json"
+                const url = "http://127.0.0.1:3001/api2/B551182/hospInfoService1/getHospBasisList1?numOfRows=10"
+                // const serviceKey = "R%2BBEwJ49XVmTutdoCAdNq4m7wjOsdFNhVtlzkxWVeZJPhwQqWbGcD7CNeQPipFzIWAanQVw%2FrPLsGkfcYvD4AQ%3D%3D"
+                const serviceKey = "R+BEwJ49XVmTutdoCAdNq4m7wjOsdFNhVtlzkxWVeZJPhwQqWbGcD7CNeQPipFzIWAanQVw/rPLsGkfcYvD4AQ==";
+                const sidoCd = "110000";
+                const sgguCd = "110019";
+                const numOfRows = 30;
+
+                fetch(`${url}&ServiceKey=${serviceKey}&sidoCd=${sidoCd}&sgguCd=${sgguCd}`)
+                    .then( response => response.text() ) 
+                    .then( text => {
+                        console.log(text);
+                        // const parser = new DOMParser(); // xml string -> 객체 트리 변환기
+                        // const xmlDoc = parser.parseFromString(text, "application/xml"); // 변환 실행
+                        // const items = xmlDoc.querySelectorAll('items item'); // items item 는 items 아래 모든 child item 가져오기
+                        //                                                     // 하나의 child 가져올 때는 items>item
+                                                                            
+                        // console.log(typeof items);
+                        // console.log(items);
+                        // items.forEach( (v, i) => console.log(v.textContent) )
+                    })
+            }
+            testC();
+
+            // // const url = "https://openapi.naver.com/v1/search/news.json"
+            // const url = "http://127.0.0.1:3001/api/v1/search/news.json"
+            // const query = "K-Pop"
+            // const display = 8
+            // const sort = "sim"
+            // const clientId = "jWSAH_Gp6qy5RZjx5rta" // 보안 위험
+            // const clientSecret = "RjWlPUhnxI"       // 보안 위험
+
+            // fetch(`${url}?query=${query}&display=${display}&sort=${sort}`,
+            //     {headers : {'X-Naver-Client-Id' : clientId, 'X-Naver-Client-Secret' : clientSecret}}
+            // )
+            // .then(response => response.json())
+            // .then(json => {
+            //     console.log(json);                
+            // });
+        });
+
+    </script>
+    
+</body>
+</html>

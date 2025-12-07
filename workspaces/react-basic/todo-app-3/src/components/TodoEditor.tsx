@@ -1,10 +1,11 @@
 import { useState, type FormEvent } from "react";
 import Button from "./html/Button";
 import Input from "./html/Input";
+import { useTodoStore } from "../store/TodoStore";
 
-export default function TodoEditor(props:{addTodo:(title:string) => void}) {
+export default function TodoEditor() {
 
-  const { addTodo } = props;
+  const addTodo = useTodoStore((state) => state.addTodo)
   const [title, setTitle] = useState("")
 
   const handleSubmit = (event: FormEvent) => {
