@@ -4,7 +4,6 @@ class TheShape {
 		System.out.println("TheShape.draw");
 	}
 }
-
 class TheRectangle extends TheShape {
 	public void draw() {
 		System.out.println("TheRectangle.draw");

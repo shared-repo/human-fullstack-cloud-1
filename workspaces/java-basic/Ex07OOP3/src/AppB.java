@@ -13,11 +13,11 @@ class TheDerived2 extends TheBase2 {
 }
 public class AppB { 
 	public static void main(String[] args) {
-		
+				
 		// 1. 상속 관계의 클래스는 참조 타입과 인스턴스 타입이 다를 수 있습니다.
 		
 		// 1-1. 묵시적 형변환 ( TheDerived2 -> TheBase2 )
-		TheBase2 b1 = new TheDerived2(); 
+		TheBase2 b1 = new TheDerived2();
 		
 		// 1-2. 명시적 형변환 1 ( TheBase2 -> TheDerived2 )
 		// TheDerived2 d1 = (TheDerived2)new TheBase2(); // 실행할 때 오류 발생

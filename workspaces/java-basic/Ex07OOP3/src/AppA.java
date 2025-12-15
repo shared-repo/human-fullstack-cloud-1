@@ -1,6 +1,6 @@
 class TheBase {
 	private int no;
-	String name;
+	String name = "test";
 	public void pm() {
 		System.out.println("TheBase.pm()이 호출되었습니다.");
 	}
@@ -10,6 +10,7 @@ class TheDerived1 extends TheBase { // TheBase의 모든 멤버를 자동으로 
 	String desc;
 	public void cm() {
 		name = "John Doe"; // 자식 클래스에서 부모의 멤버 사용 가능
+		System.out.println(name);
 		// no = 100; // 오류 : 부모 클래스의 private 멤버는 자식 클래스에서 사용할 수 없습니다.		
 		System.out.println("TheDerived1.cm()이 호출되었습니다.");
 	}
