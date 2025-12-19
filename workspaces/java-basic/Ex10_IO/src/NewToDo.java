@@ -13,6 +13,13 @@ public class NewToDo implements Serializable { // IO를 수행할 수 있도록 
 	
 	// 2. 메서드 만들기 : 생성자 -> getter, setter -> Object 상속 메서드 재정의 -> 다른 메서드
 
+	public static int getNextId() {
+		return nextId;
+	}
+	public static void setNextId(int nextId) {
+		NewToDo.nextId = nextId;
+	}
+
 	public NewToDo(String title) {
 		this.id = nextId++; // nextId를 this.id에 저장한 후 nextId 값을 1 증가		
 		this.title = title;

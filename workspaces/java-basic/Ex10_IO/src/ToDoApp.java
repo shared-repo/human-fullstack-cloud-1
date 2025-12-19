@@ -1,4 +1,7 @@
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -8,6 +11,11 @@ public class ToDoApp {
 	// 연락처 목록을 관리하는 변수
 	private ArrayList<NewToDo> todos = new ArrayList<>();
 	private Scanner scanner = new Scanner(System.in);
+	
+	public ToDoApp() {
+		// 여기에 파일에서 데이터를 읽는 코드 구현
+		load();
+	}
 	
 	// 기능 - 메서드
 	// 1. 메뉴 보여주기 + 선택
@@ -89,7 +97,36 @@ public class ToDoApp {
 		}
 	}
 	
+	public void load() {
+		FileInputStream fis = null;
+		ObjectInputStream ois = null;
+		try {
+			// 예외 발생이 의심되는 영역 - 여기서 발생한 예외만 catch에서 처리 가능
+			File f = new File("todos.dat"); // 파일의 정보를 다루는 클래스
+			if (f.exists()) {
+				fis = new FileInputStream(f);
+				ois = new ObjectInputStream(fis);
+				
+				todos = (ArrayList<NewToDo>)ois.readObject();
+				
+				int lastId = todos.getLast().getId();
+				NewToDo.setNextId(lastId + 1);
+			}
+		} catch (Exception ex) {
+			// 예외가 발생하면 실행되는 영역
+			ex.printStackTrace();
+		} finally {
+			// 예외 발생 여부와 상관 없이 무조건 실행되는 영역
+			try { ois.close(); } catch (Exception ex) {}
+			try { fis.close(); } catch (Exception ex) {}
+		}
+		
+	}
+	
 	public void run() {
+		
+		// 여기에 파일에서 데이터를 읽는 코드 구현
+		
 		main: while (true) {
 			System.out.println();
 			String task = selectTask();
