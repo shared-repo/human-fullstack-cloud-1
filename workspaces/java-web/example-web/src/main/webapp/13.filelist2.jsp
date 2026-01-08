@@ -2,9 +2,6 @@
 <%@ page language="java" 
 		 contentType="text/html; charset=UTF-8"
     	 pageEncoding="UTF-8"%>
-
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>    	 
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,14 +19,6 @@
 	File[] files = directory.listFiles(); // upload-files 디렉터리에 있는 파일과 디렉터리 목록 반환
 	pageContext.setAttribute("files", files);
 	%>
-	<c:forEach var="file" items="${ files }">
-	<p>
-		<a href="download?filename=${ file.name }">
-			${ file.name }
-		</a>
-	</p>
-	</c:forEach>
-	<hr>
 	<% for (File file : files) { %>
 	<p>
 		<a href="download?filename=<%= file.getName() %>">

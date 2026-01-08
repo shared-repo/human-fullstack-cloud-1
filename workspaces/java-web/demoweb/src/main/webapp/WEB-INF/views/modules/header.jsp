@@ -1,8 +1,10 @@
-<%@page import="com.demoweb.dto.MemberDto"%>
+<%@ page import="com.demoweb.dto.MemberDto"%>
 <%@ page language="java" 
 		 contentType="text/html; charset=UTF-8"
     	 pageEncoding="UTF-8" %>
     	 
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
     	<% String bgColor = request.getParameter("bgcolor"); %>
     	<% bgColor = (bgColor != null && bgColor.length() > 0) ? bgColor : ""; %>
     	
@@ -11,15 +13,28 @@
                 <a href="/demoweb/home">DEMO WEBSITE</a>
             </div>
             <div class="links">
-            <% MemberDto loginUser = (MemberDto)session.getAttribute("loginuser"); %>
-            <% if (loginUser == null) { %>
+            
+            <%-- 
+            <c:if test="${ loginuser == null }">
             	<a href="/demoweb/account/login">로그인</a>
                 <a href="/demoweb/account/register">회원가입</a>
-            <% } else {%>
-            	<%= loginUser.getMemberId() %>
-            	(<%= loginUser.getEmail() %>)
+            </c:if>
+            <c:if test="${ loginuser != null }">
+				${ loginuser.memberId }( ${ sessionScope.loginuser.email } )
             	<a href="/demoweb/account/logout">로그아웃</a>
-            <% } %>
+            </c:if> 
+            --%>
+            <c:choose>
+           	<c:when test="${ empty loginuser }">
+            	<a href="/demoweb/account/login">로그인</a>
+                <a href="/demoweb/account/register">회원가입</a>
+           	</c:when>
+           	<c:otherwise>
+           		${ loginuser.memberId }( ${ sessionScope.loginuser.email } )
+            	<a href="/demoweb/account/logout">로그아웃</a>
+           	</c:otherwise>
+            </c:choose>
+            
             </div>
         </div>
                 
