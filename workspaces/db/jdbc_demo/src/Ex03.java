@@ -1,0 +1,31 @@
+
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Ex03 {
+
+	public static void main(String[] args) {
+		
+		Scanner scanner = new Scanner(System.in);
+		FilmDao dao = new FilmDao();
+				
+		while (true) {
+			System.out.print("검색할 영화 제목 (종료는 q) : ");
+			String keyword = scanner.nextLine().toUpperCase();
+			if (keyword.equals("Q")) {
+				System.out.println("프로그램을 종료합니다.");
+				break;
+			}
+			ArrayList<FilmDto> films = dao.selectFilmsByTitle(keyword);
+			System.out.println("[ 영화 검색 결과 ]");
+			for (FilmDto film : films) {
+				System.out.println(film.toString());
+			}			
+		}
+		
+		scanner.close();
+			
+	}
+
+}
