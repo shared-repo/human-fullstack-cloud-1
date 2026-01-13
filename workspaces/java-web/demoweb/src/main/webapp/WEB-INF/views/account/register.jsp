@@ -64,8 +64,16 @@
 	<script type="text/javascript">
 	$(function() {
 		
+		let isIdValid = false;
+		
 		$('input#register').on('click', function(event) {
 			event.preventDefault(); // 현재 이벤트를 발생시킨 요소의 기본 동작 수행 차단 ( 예: <a>인 경우 href로 이동하는 동작 수행 차단 )
+			
+			if (!isIdValid) {
+				alert('아이디 중복검사 실패');
+				return;
+			}
+			
 			// 입력 유효성 검사
 			const id = $('#memberId').val();
 			if (id.length == 0) {
@@ -95,7 +103,39 @@
 			
 			
 			$('#registerform').submit(); // 서버로 전송
-		})
+		});
+		
+		// 1.
+		// id="btn-dup-check" 인 버튼을 찾아서 click 이벤트 연결
+		// 이벤트 처리기에서 비동기 요청 
+		// - url 상대경로: dup-check?memberid=입력한아이디
+		// - url 절대경로: /demoweb/account/dup-check?memberid=입력한아이디
+		// - method : get
+		// - 요청 결과는 alert으로 출력
+		$('#btn-dup-check').on('click', (event) => {
+			event.preventDefault();
+			const memberId = $('#memberId').val();
+			fetch('dup-check?memberid=' + memberId)
+				.then(response => response.text())
+				.then(data => {
+					if (data == 'valid') {
+						isIdValid = true;
+						alert("사용 가능한 아이디입니다.");
+					} else { 
+						isIdValid = false;
+						alert("이미 사용중인 아이디입니다.");
+					}
+					
+				});
+		});
+		
+		$('#memberId').on('keyup', (event) => {
+			// console.log( $('#memberId').val() );
+			isIdValid = false;
+		});
+		
+		
+		
 		
 	});
 	</script>

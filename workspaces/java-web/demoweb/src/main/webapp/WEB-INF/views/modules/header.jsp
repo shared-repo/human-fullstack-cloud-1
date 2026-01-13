@@ -5,10 +5,8 @@
     	 
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
-    	<% String bgColor = request.getParameter("bgcolor"); %>
-    	<% bgColor = (bgColor != null && bgColor.length() > 0) ? bgColor : ""; %>
-    	
-		<div id="header" style="background-color:<%= bgColor %>">    	
+    	<div id="header" 
+    		 style="background-color:${ not empty param.bgcolor ? param.bgcolor : '' }">    	
             <div class="title">
                 <a href="/demoweb/home">DEMO WEBSITE</a>
             </div>

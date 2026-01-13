@@ -97,5 +97,45 @@ public class MemberDao {
 		
 		return member;
 	}
+
+	public int selectMemberCountById(String memberId) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int count = 0; // 죄회 결과를 저장할 변수
+		
+		try {
+			//1. 드라이버 준비
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			
+			//2. 연결 객체 만들기
+			conn = 
+			DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/labdb", // 서버와 DB 위치 지정 
+										"human", "human"); // 아이디, 패스워드
+			
+			// 3. SQL 작성 + 명령 객체 만들기			
+			String sql = "select count(*) from tbl_member where memberid = ?"; // ? : 여기에 데이터가 결합될 예정
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, memberId); // 첫 번째 ?에 적용할 데이터
+			
+			// 4. 명령 실행 + 결과가 있다면(select 인 경우) 결과 수신 
+			rs = pstmt.executeQuery();
+			
+			// 5. 결과가 있다면 (select인 경우) 결과 처리
+			if (rs.next()) { // 다음 행으로 이동 ( 더 이상 데이터가 없으면 false 반환 )
+				count = rs.getInt(1);
+			}
+
+		} catch (Exception ex) {
+			
+		} finally {
+			// 6. 연결 종료
+			try { rs.close(); } catch (Exception ex) {}
+			try { pstmt.close(); } catch (Exception ex) {}
+			try { conn.close(); } catch (Exception ex) {}
+		}
+		
+		return count;
+	}
 	
 }

@@ -26,8 +26,8 @@ public class DemoWebListener implements ServletContextListener, HttpSessionListe
 	
 	@Override
 	public void sessionCreated(HttpSessionEvent se) {
-		HttpSession session = se.getSession();
-		session.setMaxInactiveInterval(30);
+//		HttpSession session = se.getSession();
+//		session.setMaxInactiveInterval(30);
 		
 		// 1. application 객체 준비
 		ServletContext application = se.getSession().getServletContext();

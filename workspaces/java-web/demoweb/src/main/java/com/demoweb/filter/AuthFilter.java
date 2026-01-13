@@ -26,7 +26,8 @@ public class AuthFilter implements Filter {
 		String uri = req.getRequestURI();
 		if (uri.contains("/admin") ||
 			uri.contains("/mail") ||
-			uri.contains("/library")) {
+			uri.contains("/library") ||
+			uri.contains("/board/write")) {
 			
 			MemberDto member = (MemberDto)req.getSession().getAttribute("loginuser");
 			if (member == null) { 
