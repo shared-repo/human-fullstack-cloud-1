@@ -24,9 +24,17 @@ public class TestMain {
 			appContext.getBean("serviceConsumer2", ServiceConsumer.class);
 		consumer2.doSomething();
 		
+		consumer2 = 
+			appContext.getBean("serviceConsumer2", ServiceConsumer.class);
+		consumer2.doSomething();
+		
 		System.out.println("------------------------------------------->");
 		
 		ServiceConsumer consumer3 = 
+			appContext.getBean("serviceConsumer3", ServiceConsumer.class);
+		consumer3.doSomething();
+		
+		consumer3 = 
 			appContext.getBean("serviceConsumer3", ServiceConsumer.class);
 		consumer3.doSomething();
 		
