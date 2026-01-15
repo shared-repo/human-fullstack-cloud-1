@@ -69,10 +69,10 @@
 		$('input#register').on('click', function(event) {
 			event.preventDefault(); // 현재 이벤트를 발생시킨 요소의 기본 동작 수행 차단 ( 예: <a>인 경우 href로 이동하는 동작 수행 차단 )
 			
-			/* if (!isIdValid) {
+			if (!isIdValid) {
 				alert('아이디 중복검사 실패');
 				return;
-			} */
+			}
 			
 			// 입력 유효성 검사
 			const id = $('#memberId').val();

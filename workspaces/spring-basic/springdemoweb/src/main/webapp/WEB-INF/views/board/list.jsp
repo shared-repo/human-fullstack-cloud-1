@@ -1,9 +1,10 @@
-<%@page import="java.util.ArrayList"%>
-<%@page import="com.demoweb.dto.BoardDto"%>
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="com.demoweb.dto.BoardDto"%>
 <%@ page language="java" 
 		 contentType="text/html; charset=utf-8"
     	 pageEncoding="utf-8"%>
     	 
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <!DOCTYPE html>
 
@@ -38,18 +39,20 @@
 					<th style="width:125px">수정일</th>
 				</tr>
 				<%-- 게시물 목록 표시 : 위의 <tr>과 <th>를 참고해서 구현, 반복문 사용 필요 --%>
-				<% for (BoardDto board : (ArrayList<BoardDto>)request.getAttribute("boards")) { %>
+				<c:forEach var="board" items="${ boards }">
 				<tr style="height:30px">
-					<td><%= board.getBoardNo() %></td>
+					<td>${ board.boardNo }</td>
 					<td style="text-align:left;padding-left:5px">
-					<%= board.getTitle() %>
+						<a href="detail?boardNo=${ board.boardNo }">
+							${ board.title }
+						</a>
 					</td>
-					<td style="text-align:left;padding-left:5px"><%= board.getWriter() %></td>
-					<td><%= board.getReadCount() %></td>
-					<td><%= board.getWriteDate() %></td>
-					<td><%= board.getModifyDate() %></td>
+					<td style="text-align:left;padding-left:5px">${ board.writer }</td>
+					<td>${ board.readCount }</td>
+					<td>${ board.writeDate }</td>
+					<td>${ board.modifyDate }</td>
 				</tr>
-				<% } %>
+				</c:forEach>
 								
 			</table>
 			

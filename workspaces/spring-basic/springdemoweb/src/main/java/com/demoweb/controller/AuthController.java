@@ -1,22 +1,36 @@
 package com.demoweb.controller;
 
+import java.io.PrintWriter;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.demoweb.common.Util;
 import com.demoweb.dao.MemberDao;
+import com.demoweb.dao.MySqlMemberDao;
 import com.demoweb.dto.MemberDto;
 
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class AuthController {
+	
+	@Autowired // IoC Container가 자동으로 MemberDao 호환 타입 객체를 주입
+	@Qualifier("memberDao") // memberDao로 등록된 객체로 한정
+	private MemberDao dao;
 
 	@GetMapping(path = { "/account/login" })
-	public String loginView() {
+	public String loginView(
+			@RequestParam(value="returnUrl", defaultValue = "/home") String returnUrl,
+			Model model) {
+		
+		model.addAttribute("returnUrl", returnUrl);
 		
 		return "account/login"; // "/WEB-INF/views/" + account/login + ".jsp"
 	}
@@ -25,6 +39,7 @@ public class AuthController {
 	public String login(
 			@RequestParam("memberId") String memberId,
 			@RequestParam("passwd") String passwd,
+			@RequestParam("returnUrl") String returnUrl,
 			HttpSession session,
 			Model model) { // Model 타입 전달인자는 View로 데이터를 전달하는 통로
 		
@@ -34,7 +49,7 @@ public class AuthController {
 		// 2. 요청 처리 (로그인)
 		// 2-1. 로그인 가능 여부 확인
 		// 		a. MemberDao 객체 만들기
-		MemberDao dao = new MemberDao();
+		//         의존 주입으로 처리
 		// 		b. a에서 만든 객체의 selectMemberByIdAndPasswd 메서드 호출
 		MemberDto member = dao.selectMemberByIdAndPasswd(memberId, passwd);
 		//         (전달인자 : memberId, passwd)
@@ -52,7 +67,8 @@ public class AuthController {
 		
 		if (success) {
 			// 다른 작업 영역으로 이동할 때에는 redirect로 이동합니다.
-			return "redirect:/home"; // home으로 이동
+			// return "redirect:/home"; // home으로 이동
+			return "redirect:" + returnUrl;
 		} else {
 			// 3. View에서 읽을 수 있도록 Model 타입 객체에 데이터 저장
 			model.addAttribute("loginfail", "fail");
@@ -78,7 +94,7 @@ public class AuthController {
 		member.setPasswd(hashedPasswd);
 		
 		// 3. MemberDao 객체 만들기
-		MemberDao dao = new MemberDao();
+		//    의존 객체 주입으로 처리
 		
 		// 4. MemberDao의 insertMember 메서드 호출 (전달인자 2에서 만든 MemberDto)
 		dao.insertMember(member);
@@ -104,6 +120,24 @@ public class AuthController {
 	// 3. 중복 검사 구현
 	//    DemoController의 9번 작업
 	//    DupCheckServlet doGet
+	@GetMapping(path = { "/account/dup-check" }, produces = "text/plain;charset=utf-8")
+	@ResponseBody
+	public String checkDup(
+			@RequestParam("memberid") String memberId) {
+		
+		// 1. 요청 데이터 읽기 - 전달인자를 통해 직접 수신
+		
+		// 2. 요청 처리 ( 중복 여부 확인 - 데이터베이스 조회 )
+		int count = dao.selectMemberCountById(memberId);
+		
+		// 3. 결과 응답		
+//		if (count > 0) {
+//		 	return "invalid";
+//		} else {
+//			return "valid";
+//		}
+		return count > 0 ? "invalid" : "valid";
+	}
 	
 	
 }
