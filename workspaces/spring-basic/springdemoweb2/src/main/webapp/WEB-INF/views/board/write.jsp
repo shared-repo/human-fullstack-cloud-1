@@ -10,8 +10,8 @@
 <head>
 	<meta charset="utf-8" />
 	<title>게시판글쓰기</title>
-	<link rel="Stylesheet" href="/springdemoweb/resources/styles/default.css" />
-	<link rel="Stylesheet" href="/springdemoweb/resources/styles/input2.css" />
+	<link rel="Stylesheet" href="/springdemoweb2/resources/styles/default.css" />
+	<link rel="Stylesheet" href="/springdemoweb2/resources/styles/input2.css" />
 </head>
 <body>
 

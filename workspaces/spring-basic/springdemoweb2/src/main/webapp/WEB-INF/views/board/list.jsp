@@ -12,7 +12,7 @@
 <head>
 	<meta charset="utf-8" />
 	<title>게시글 목록</title>
-	<link rel="Stylesheet" href="/springdemoweb/resources/styles/default.css" />
+	<link rel="Stylesheet" href="/springdemoweb2/resources/styles/default.css" />
 	<style>
 	a { text-decoration: none }
 	</style>

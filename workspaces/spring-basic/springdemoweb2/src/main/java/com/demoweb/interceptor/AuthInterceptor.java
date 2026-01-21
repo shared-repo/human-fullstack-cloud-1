@@ -28,11 +28,11 @@ public class AuthInterceptor implements HandlerInterceptor {
 			
 			MemberDto member = (MemberDto)req.getSession().getAttribute("loginuser");
 			if (member == null) { 
-				resp.sendRedirect("/springdemoweb/account/login?returnUrl=" + uri);
+				resp.sendRedirect("/springdemoweb2/account/login?returnUrl=" + uri);
 				return false; // 요청 처리 중단
 			}
 			if (uri.contains("/admin") && !member.getUserType().equals("admin")) {
-				resp.sendRedirect("/springdemoweb/account/login?returnUrl=" + uri);
+				resp.sendRedirect("/springdemoweb2/account/login?returnUrl=" + uri);
 				return false; // 요청 처리 중단
 			}			
 		}
