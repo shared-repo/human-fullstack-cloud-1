@@ -1,7 +1,5 @@
 package com.demoweb.controller;
 
-import java.io.PrintWriter;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -12,19 +10,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.demoweb.common.Util;
-import com.demoweb.dao.MemberDao;
-import com.demoweb.dao.DataSourceMemberDao;
 import com.demoweb.dto.MemberDto;
+import com.demoweb.mapper.MemberMapper;
 
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class AuthController {
 	
-	@Autowired // IoC Container가 자동으로 MemberDao 호환 타입 객체를 주입
-	// @Qualifier("dataSourceMemberDao") 	// dataSourceMemberDao로 등록된 객체로 한정
-	@Qualifier("jdbcTemplateMemberDao") 	// jdbcTemplateMemberDao로 등록된 객체로 한정
-	private MemberDao dao;
+	@Autowired
+	@Qualifier("memberMapper")
+	private MemberMapper memberMapper;
 
 	@GetMapping(path = { "/account/login" })
 	public String loginView(
@@ -52,7 +48,7 @@ public class AuthController {
 		// 		a. MemberDao 객체 만들기
 		//         의존 주입으로 처리
 		// 		b. a에서 만든 객체의 selectMemberByIdAndPasswd 메서드 호출
-		MemberDto member = dao.selectMemberByIdAndPasswd(memberId, passwd);
+		MemberDto member = memberMapper.selectMemberByIdAndPasswd(memberId, passwd);
 		//         (전달인자 : memberId, passwd)
 		//         반환값을 MemberDto 타입 변수 member에 저장
 		//      
@@ -98,7 +94,7 @@ public class AuthController {
 		//    의존 객체 주입으로 처리
 		
 		// 4. MemberDao의 insertMember 메서드 호출 (전달인자 2에서 만든 MemberDto)
-		dao.insertMember(member);
+		memberMapper.insertMember(member);
 		
 		// 5. 로그인 서블릿으로 redirect 이동
 		// return "redirect:/account/login"; // 절대 경로
@@ -129,7 +125,7 @@ public class AuthController {
 		// 1. 요청 데이터 읽기 - 전달인자를 통해 직접 수신
 		
 		// 2. 요청 처리 ( 중복 여부 확인 - 데이터베이스 조회 )
-		int count = dao.selectMemberCountById(memberId);
+		int count = memberMapper.selectMemberCountById(memberId);
 		
 		// 3. 결과 응답		
 //		if (count > 0) {

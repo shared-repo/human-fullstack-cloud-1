@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+	PUBLIC 	"-//mybatis.org//DTD Mapper 3.0//EN" 
+			"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace : 패키지이름.클래스이름 -->
+<mapper namespace="com.demoweb.mapper.BoardMapper">
+
+	<select id="selectBoardListByPage"
+			parameterType="hashmap" resultType="com.demoweb.dto.BoardDto">
+		select boardno, title, writer, writedate, modifydate, readcount, deleted
+		from tbl_board
+		order by boardno desc						 
+		limit #{start}, #{count} 
+	</select>
+	
+	<insert id="insertBoard" 
+			parameterType="com.demoweb.dto.BoardDto"
+			useGeneratedKeys="true" keyProperty="boardNo">
+		insert into tbl_board (title, writer, content) 
+		values (#{title}, #{writer}, #{content})
+	</insert>
+	<!--  
+	<insert id="insertBoard" 
+			parameterType="com.demoweb.dto.BoardDto">
+		<selectKey keyProperty="boardNo" order="AFTER" resultType="int">
+			select last_insert_id()
+		</selectKey>
+		insert into tbl_board (title, writer, content) 
+		values (#{title}, #{writer}, #{content})
+	</insert>
+	-->
+	
+	<update id="updateBoardReadCount" parameterType="int">
+		update tbl_board set readcount = readcount + 1 where boardno = #{boardNo}
+	</update>
+	
+	<update id="deleteBoard" parameterType="int">
+		update tbl_board set deleted = true where boardno = #{boardNo}
+	</update>
+	
+	<!--  **************************************************************** -->
+	
+	<select id="selectBoardByBoardNo"
+			parameterType="int"
+			resultType="com.demoweb.dto.BoardDto">
+		select boardno, title, writer, content, writedate, modifydate, readcount
+		from tbl_board
+		where boardno = #{boardNo} and deleted = false
+	</select>
+	
+	<resultMap id="boardResultMap" type="com.demoweb.dto.BoardDto">
+		<result column="boardno" property="boardNo" />
+		<result column="title" property="title" />
+		<result column="writer" property="writer" />
+		<result column="content" property="content" />
+		<result column="writedate" property="writeDate" />
+		<result column="modifydate" property="modifyDate" />
+		<result column="readcount" property="readCount" />
+	</resultMap>
+	<select id="selectBoardByBoardNoWithResultMap"
+			parameterType="int"
+			resultMap="boardResultMap">
+		select boardno, title, writer, content, writedate, modifydate, readcount
+		from tbl_board
+		where boardno = #{boardNo} and deleted = false
+	</select>
+	
+	<resultMap type="com.demoweb.dto.BoardAttachDto" id="boardAttachResultMap">
+		<id column="attachNo" property="attachNo" />
+		<result column="boardno" property="boardNo" />
+		<result column="userfilename" property="userFileName" />
+		<result column="savedfilename" property="savedFileName" />
+		<result column="downloadcount" property="downloadCount" />
+	</resultMap>
+	
+	<select id="selectBoardAttachmentsByBoardNo"
+			parameterType="int"
+			resultMap="boardAttachResultMap">
+		select attachno, boardno, userfilename, savedfilename, downloadcount
+		from tbl_boardattach 
+		where boardno = #{boardNo}
+	</select>
+	
+	<!-- ************************************* -->
+	<resultMap id="boardResultMap2" type="com.demoweb.dto.BoardDto">
+		<id column="boardno" property="boardNo" />
+		<result column="title" property="title" />
+		<result column="writer" property="writer" />
+		<result column="content" property="content" />
+		<result column="writedate" property="writeDate" />
+		<result column="modifydate" property="modifyDate" />
+		<result column="readcount" property="readCount" />
+		<collection property="attachments" 
+					resultMap="boardAttachResultMap2" column="attachNo" />
+	</resultMap>
+	<resultMap id="boardAttachResultMap2" type="com.demoweb.dto.BoardAttachDto">
+		<id column="attachNo" property="attachNo" />
+		<result column="boardno" property="boardNo" />
+		<result column="userfilename" property="userFileName" />
+		<result column="savedfilename" property="savedFileName" />
+		<result column="downloadcount" property="downloadCount" />
+	</resultMap>
+	<select id="selectBoardByBoardNoWithJoin"
+			parameterType="int"
+			resultMap="boardResultMap2">
+		SELECT 
+			b.boardNo, b.title, b.writer, b.content, b.readCount, b.writeDate, b.modifyDate,
+			ba.attachNo, ba.userFileName, ba.savedFileName, ba.downloadCount
+		FROM tbl_board b
+		LEFT OUTER JOIN tbl_boardattach ba
+		ON b.boardno = ba.boardno
+		WHERE b.boardno = #{ boardNo } AND b.deleted = false
+	</select>
+	
+	<!-- ******************************************* -->
+	
+	<resultMap id="boardResultMap3" type="com.demoweb.dto.BoardDto">
+		<id column="boardno" property="boardNo" />
+		<result column="title" property="title" />
+		<result column="writer" property="writer" />
+		<result column="content" property="content" />
+		<result column="writedate" property="writeDate" />
+		<result column="modifydate" property="modifyDate" />
+		<result column="readcount" property="readCount" />
+		<collection property="attachments" 
+					select="selectBoardAttachmentsByBoardNo"
+					column="boardNo" />
+	</resultMap>	
+	<select id="selectBoardByBoardNoWithSelect"
+			parameterType="int"
+			resultMap="boardResultMap3">
+		SELECT 
+			b.boardNo, b.title, b.writer, b.content, b.readCount, b.writeDate, b.modifyDate			
+		FROM tbl_board b		
+		WHERE b.boardno = #{ boardNo } AND b.deleted = false
+	</select>
+
+</mapper>
+
+
+
+
+
+
+
+

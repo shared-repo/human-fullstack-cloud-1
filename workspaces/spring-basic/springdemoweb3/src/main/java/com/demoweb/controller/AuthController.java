@@ -1,7 +1,5 @@
 package com.demoweb.controller;
 
-import java.io.PrintWriter;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.demoweb.common.Util;
 import com.demoweb.dao.MemberDao;
-import com.demoweb.dao.DataSourceMemberDao;
 import com.demoweb.dto.MemberDto;
 
 import jakarta.servlet.http.HttpSession;
@@ -23,7 +20,8 @@ public class AuthController {
 	
 	@Autowired // IoC Container가 자동으로 MemberDao 호환 타입 객체를 주입
 	// @Qualifier("dataSourceMemberDao") 	// dataSourceMemberDao로 등록된 객체로 한정
-	@Qualifier("jdbcTemplateMemberDao") 	// jdbcTemplateMemberDao로 등록된 객체로 한정
+	// @Qualifier("jdbcTemplateMemberDao") 	// jdbcTemplateMemberDao로 등록된 객체로 한정
+	@Qualifier("mybatisMemberDao") 			// mybatisMemberDao로 등록된 객체로 한정
 	private MemberDao dao;
 
 	@GetMapping(path = { "/account/login" })

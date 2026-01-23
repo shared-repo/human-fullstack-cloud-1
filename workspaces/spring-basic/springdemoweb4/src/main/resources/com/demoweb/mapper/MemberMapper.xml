@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+	PUBLIC 	"-//mybatis.org//DTD Mapper 3.0//EN" 
+			"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace : 패키지이름.클래스이름 -->
+<mapper namespace="com.demoweb.mapper.MemberMapper">
+
+	<insert id="insertMember" parameterType="com.demoweb.dto.MemberDto">
+		insert into tbl_member (memberid, passwd, email) 
+		values (#{memberId}, #{passwd}, #{email})
+	</insert>
+	
+	<select id="selectMemberByIdAndPasswd" 
+			parameterType="hashmap" 
+			resultType="com.demoweb.dto.MemberDto">
+		SELECT memberId, email, userType, joinDate, active
+		FROM tbl_member
+		WHERE memberId = #{ memberId } AND passwd = #{ passwd }
+	</select>
+	
+	<select id="selectMemberCountById"
+			parameterType="string" resultType="int">
+		select count(*) from tbl_member where memberid = #{memberId}
+	</select>
+
+</mapper>
+
+
+
+
+
+
+
+

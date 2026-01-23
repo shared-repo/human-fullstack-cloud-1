@@ -21,8 +21,17 @@
 		<property name="maxIdle" value="10" />
 	</bean>
 	
-	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-		<constructor-arg ref="dataSource" />
+	<!-- SqlSessionFactoryBean.getObject()를 호출해서 
+		 SqlSessionFactory 객체를 만드는 bean 설정 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+	</bean>
+	
+	<!-- SqlSessionFactory를 사용해서 SqlSession 객체를 만들고 
+		 SqlSession 객체를 감싸는 SqlSessionTemplate 객체 생성 -->
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory" />
 	</bean>
 
 </beans>

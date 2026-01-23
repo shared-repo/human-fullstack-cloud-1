@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+	PUBLIC 	"-//mybatis.org//DTD Mapper 3.0//EN" 
+			"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace : 패키지이름.클래스이름 -->
+<mapper namespace="com.myweb.mapper.ToDoMapper">
+
+	<insert id="insertToDo" parameterType="com.myweb.dto.ToDoDto">
+		insert into newtodo2 (title, content, completed)
+		values (#{title}, #{content}, #{completed})
+	</insert>
+	
+	<select id="selectAllToDo" resultType="com.myweb.dto.ToDoDto">
+		select idx, title, writedate, completed
+		from newtodo2
+		order by completed asc, writedate desc
+	</select>
+
+</mapper>
+
+
+
+
+
+
+
+

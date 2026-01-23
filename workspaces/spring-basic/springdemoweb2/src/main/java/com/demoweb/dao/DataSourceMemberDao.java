@@ -27,7 +27,7 @@ public class DataSourceMemberDao implements MemberDao {
 		
 		try {
 			//1. 드라이버 준비
-			Class.forName("com.mysql.cj.jdbc.Driver");
+			// Class.forName("com.mysql.cj.jdbc.Driver");
 			
 			//2. 연결 객체 만들기
 			conn = dataSource.getConnection();
@@ -70,7 +70,7 @@ public class DataSourceMemberDao implements MemberDao {
 		
 		try {
 			//1. 드라이버 준비
-			Class.forName("com.mysql.cj.jdbc.Driver");
+			// Class.forName("com.mysql.cj.jdbc.Driver");
 			
 			//2. 연결 객체 만들기
 			conn = dataSource.getConnection();
@@ -117,7 +117,7 @@ public class DataSourceMemberDao implements MemberDao {
 		
 		try {
 			//1. 드라이버 준비
-			Class.forName("com.mysql.cj.jdbc.Driver");
+			// Class.forName("com.mysql.cj.jdbc.Driver");
 			
 			//2. 연결 객체 만들기
 			conn = dataSource.getConnection();
