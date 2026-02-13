@@ -1,0 +1,40 @@
+services:
+
+  db-server:
+    build: 
+      context: dbserver
+      dockerfile: Dockerfile
+    ports:
+      - "3306:3306"
+    volumes:
+      - D:/mysql-data:/var/lib/mysql
+    networks:
+      - human-net2
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web-server:
+    build: 
+      context: webserver
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - D:/upload-pictures:/work/upload-pictures
+    networks:
+      - human-net2
+    depends_on:
+      db-server:
+        condition: service_healthy
+
+volumes:
+  mysql-data:
+  upload-pictures:
+
+networks:
+  human-net2:
+    external: true
+    name: human-net

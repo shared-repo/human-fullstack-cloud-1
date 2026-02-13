@@ -75,7 +75,7 @@ public class ToDoController {
 		
 		toDoMapper.deleteToDo(idx);
 		
-		return "todo/detail";
+		return "redirect:/todo/detail";
 		
 	}
 	
