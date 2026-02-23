@@ -5,16 +5,16 @@
 			"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!-- namespace : 패키지이름.클래스이름 -->
-<mapper namespace="com.demoweb.mapper.MemberMapper">
+<mapper namespace="com.humanda6.demoweb2.mapper.MemberMapper">
 
-	<insert id="insertMember" parameterType="com.demoweb.dto.MemberDto">
+	<insert id="insertMember" parameterType="MemberDto">
 		insert into tbl_member (memberid, passwd, email) 
 		values (#{memberId}, #{passwd}, #{email})
 	</insert>
 	
 	<select id="selectMemberByIdAndPasswd" 
 			parameterType="hashmap" 
-			resultType="com.demoweb.dto.MemberDto">
+			resultType="MemberDto">
 		SELECT memberId, email, userType, joinDate, active
 		FROM tbl_member
 		WHERE memberId = #{ memberId } AND passwd = #{ passwd }

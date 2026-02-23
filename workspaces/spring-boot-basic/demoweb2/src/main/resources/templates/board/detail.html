@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+    <title>글 내용</title>
+
+    <style>
+      #loader {
+        transition: all 0.3s ease-in-out;
+        opacity: 1;
+        visibility: visible;
+        position: fixed;
+        height: 100vh;
+        width: 100%;
+        background: #fff;
+        z-index: 90000;
+      }
+
+      #loader.fadeOut {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .spinner {
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        top: calc(50% - 20px);
+        left: calc(50% - 20px);
+        background-color: #333;
+        border-radius: 100%;
+        -webkit-animation: sk-scaleout 1.0s infinite ease-in-out;
+        animation: sk-scaleout 1.0s infinite ease-in-out;
+      }
+
+      @-webkit-keyframes sk-scaleout {
+        0% { -webkit-transform: scale(0) }
+        100% {
+          -webkit-transform: scale(1.0);
+          opacity: 0;
+        }
+      }
+
+      @keyframes sk-scaleout {
+        0% {
+          -webkit-transform: scale(0);
+          transform: scale(0);
+        } 100% {
+          -webkit-transform: scale(1.0);
+          transform: scale(1.0);
+          opacity: 0;
+        }
+      }
+    </style>
+  	<script defer="defer" th:src="@{/main.js}"></script>
+  </head>
+  <body class="app">
+    
+    <div id="loader">
+      <div class="spinner"></div>
+    </div>
+
+    <script>
+      window.addEventListener('load', function load() {
+        const loader = document.getElementById('loader');
+        setTimeout(function() {
+          loader.classList.add('fadeOut');
+        }, 300);
+      });
+    </script>
+    
+    <div>
+      
+      <div th:replace="~{page_modules/sidebar :: sidebar}"></div>
+
+      <!-- #Main ============================ -->
+      <div class="page-container">
+        
+        <div th:replace="~{page_modules/topbar :: topbar}"></div>
+        
+        <!-- ### $App Screen Content ### -->
+        <main class="main-content bgc-grey-100">
+          <div id="mainContent">
+            <div class="container-fluid">
+          	  <div class="row">
+                <div class="col-md-12">
+                  <div class="bgc-white p-20 bd">
+                  <h6 class="c-grey-900">게시글 내용</h6>
+                  <div class="mT-30">
+                      <div class="mb-3">
+                        <label class="form-label" for="title">제목</label>
+                        <input type="text" class="form-control" id="title" readonly th:value="${ board.title }">
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label" for="writer">작성자(email)</label>
+                        <input type="text" class="form-control" id="writer" readonly th:value="${ board.writer.email }">
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">첨부파일</label>
+                        <div class="alert alert-success" role="alert" th:each="attachment: ${board.attachments}">
+	                        <span th:text="${attachment.userFileName}"></span>&nbsp;&nbsp;
+	                        [<a th:href="@{/board/download(attachNo=${attachment.attachNo})}">다운로드</a>]
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label" for="content">글내용</label>
+                        <textarea id="content" class="form-control" rows="10" readonly th:text='${ #strings.replace(board.content, "\n", "<br>") }'></textarea>
+                      </div>
+                      <div>
+                      	<th:block th:if="${ session.loginuser != null && session.loginuser.email == board.writer.email }">
+	                    <button type="button" id="edit-btn" class="btn btn-primary btn-color btn-sm">수정</button>
+	                    <button type="button" id="delete-btn" class="btn btn-primary btn-color btn-sm">삭제</button>
+	                    </th:block>
+	                    <button type="button" id="to-list-btn" class="btn btn-primary btn-color btn-sm">목록</button>
+                      </div>
+
+                  </div>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+        
+      </div>
+      
+    </div>
+    
+    <script th:inline='javascript'>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const cancelBtn = document.querySelector('#to-list-btn');
+        cancelBtn.addEventListener('click', function() {
+            window.location.href = "list?boardNo=" + [[${board.boardNo}]] + "&pageNo=" + [[${ pageNo }]]; // /board/list
+        });
+        
+        const btnDelete = document.querySelector('#delete-btn');
+		if (btnDelete) {
+			btnDelete.addEventListener('click', function(event) {
+				const isOk = window.confirm('삭제할까요?');
+				if (isOk) {
+					location.href = 'delete?boardNo=' + [[${ board.boardNo }]] + "&pageNo=" + [[${ pageNo }]];
+				}
+			});	
+		}
+		
+		const btnEdit = document.querySelector('#edit-btn');
+		if (btnEdit) {
+			btnEdit.addEventListener('click', function(event) {
+				location.href = 'edit?boardNo=' + [[${ board.boardNo }]] + "&pageNo=" + [[${ pageNo }]];
+			});	
+		}
+		
+        
+    });
+	</script>
+  </body>
+</html>
