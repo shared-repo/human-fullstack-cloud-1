@@ -80,6 +80,9 @@ public class BoardEntity {
 	@JoinColumn(name = "boardNo")
 	private Collection<BoardAttachEntity> attachments;
 	
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    // @JoinColumn(name = "boardNo")
+    private List<BoardCommentEntity> comments;
 	
 	public BoardDto toBoardDto() {
 		BoardDto boardDto = new BoardDto();
