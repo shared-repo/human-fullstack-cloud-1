@@ -1,0 +1,116 @@
+1. 이메일 서비스의 메일 설정 변경 
+
+   pop3/imap + smtp 설정 변경
+
+
+2. 라이브러리 추가
+
+   build.gradle에 추가
+
+   implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+3. 메일 전송 링크 만들기
+
+   <a href="/send-email">메일 보내기</a>
+
+4. IoC 컨테이너에 메일 전송 객체 등록
+
+   DemoWebMvcConfig.java (이름은 변경 가능) 클래스 만들고 아래 내용 구현
+
+package com.humanda6.demoweb2.config;
+
+import java.util.Properties;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import com.humanda6.demoweb2.interceptor.AuthInterceptor;
+
+@Configuration
+public class DemoWebMvcConfig implements WebMvcConfigurer { // web mvc 설정 클래스
+
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		
+		registry.addInterceptor(new AuthInterceptor())
+				.addPathPatterns("/board/**");
+		
+	}
+	
+	@Bean
+	public JavaMailSender mailSender() {
+		
+		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+		mailSender.setHost("smtp.naver.com");
+		mailSender.setPort(465);
+		mailSender.setDefaultEncoding("utf-8");
+		mailSender.setUsername("ohchihooooon");
+		mailSender.setPassword("75224K8YJ64G");
+		
+		Properties props = new Properties();
+		props.put("mail.debug", true);
+		props.put("mail.smtp.starttls.enable", true);
+		props.put("mail.smtp.starttls.required", true);
+		props.put("mail.smtp.auth", true);
+		props.put("mail.smtp.ssl.enable", true);
+		props.put("mail.smtp.ssl.trust", true);
+		mailSender.setJavaMailProperties(props);
+		
+		return mailSender;
+	}
+	
+}
+
+5. 메일 전송 코드 구현
+
+   MailController.java ( 이름 변경 가능) 파일 만들고 아래 코드 구현
+
+package com.humanda6.demoweb2.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import jakarta.mail.internet.MimeMessage;
+import lombok.Setter;
+
+@Controller
+public class MailController {
+	
+//	@Autowired
+//	private JavaMailSender mailSender;
+	
+	@Setter(onMethod_ = { @Autowired })
+	private JavaMailSender mailSender;
+
+	@GetMapping(path = { "/send-email" })
+	public String sendMail() {
+		
+		boolean success = true;
+		try {
+			MimeMessage message = mailSender.createMimeMessage();
+			MimeMessageHelper messageHelper = new MimeMessageHelper(message, true);
+			
+			messageHelper.setFrom("ohchihooooon@naver.com");
+			messageHelper.setTo(new String[] { "oh.chi.hooooon@gmail.com", "shared.repo.z@gmail.com" });
+			message.setSubject("메일 보내기 연습");
+			message.setContent(
+					String.format("<html><body><h1>%s</h1></body></html>", "메일을 확인해 주세요"), 
+					"text/html;charset=utf-8");
+			
+			mailSender.send(message);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			success = false;
+		}
+		
+		return "redirect:/";
+	}
+	
+}

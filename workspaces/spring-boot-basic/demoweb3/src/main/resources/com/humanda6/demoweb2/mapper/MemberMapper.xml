@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.humanda6.demoweb2.mapper.MemberMapper">
+
+    <insert id="insertMember" parameterType="MemberDto">
+        INSERT INTO tbl_member (email, passwd, user_name)
+        VALUES (#{email}, #{passwd}, #{userName})
+    </insert>
+    
+    <select id="selectMemberByEmailAndPasswd" parameterType="hashmap" resultType="MemberDto">
+        SELECT email, user_name
+        FROM tbl_member
+        WHERE email = #{email} AND passwd = #{passwd}
+    </select>
+
+</mapper>

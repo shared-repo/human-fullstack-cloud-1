@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div>
+
+        {% include 'page_modules/sidebar.html' %}
+
+        <!-- #Main ============================ -->
+        <div class="page-container">
+
+            {% include 'page_modules/topbar.html' %}
+
+            <!-- ### $App Screen Content ### -->
+            <main class="main-content bgc-grey-100">
+            <div id="mainContent">
+
+                {% block main_content %}
+                {% endblock %}
+                
+            </div>
+            </main>
+
+            {% include 'page_modules/footer.html' %}
+
+        </div>
+    </div>
+
+{% endblock %}

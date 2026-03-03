@@ -1,0 +1,162 @@
+1. 삭제 기능 구현
+
+detail.html
+
+		// 댓글 삭제
+		// $('#comment-list .delete-comment').on('click', function(event) {
+		$('#comment-list').on('click', '.delete-comment', function(event) {
+			event.preventDefault();
+							// this == event.target
+			var commentNo = $(this).data('comment-no'); // .data('comment-no') --> data-comment-no="value"를 조회
+			
+			const yn = confirm(commentNo + "번 댓글을 삭제할까요?");
+			if (!yn) return;
+			
+			// 동기 방식 All Refresh 요청
+			//location.href = 
+			//	'delete-comment?commentNo=' + commentNo + '&boardNo=${board.boardNo}&pageNo=${pageNo}';
+			
+			// jQuery 기반의 비동기(ajax) 요청
+			$.ajax({
+				"url": "delete-comment",
+				"method": "get",
+				"data" : 'commentNo=' + commentNo,
+				"success": function(data, status, xhr) {
+					if (data == "success") {
+						// 1. 해당 댓글만 수정
+						/*
+						const html = `<br><br>
+							<span style='color:gray'>삭제된 글입니다.</span>
+							<br><br>`						
+						$('#comment-view-area-' + commentNo).html(html); 
+						*/
+						// 2. 댓글 목록 전체 갱신
+						//    jQuery의 load 함수 : 지정된 html 요소의 내용을 응답받은 부분 HTML로 (비동기) 갱신
+						$('#comment-list').load('comment-list?boardNo=' + [[${ board.boardNo }]]);
+					} else {
+						alert('삭제 실패 2');
+					}
+					
+				},
+				"error": function(xhr, status, err) {
+					alert('삭제 실패 1');
+				}
+			});
+			
+		});
+
+
+2. 삭제 기능 구현 - Controller 구현
+
+   BoardCommentController
+
+ @GetMapping(path = { "/delete-comment" })
+	@ResponseBody // 반환 값은 view 이름이 아니고 응답 컨텐츠 입니다.
+	public String deleteComment(@RequestParam(name="commentNo", defaultValue = "-1") int commentNo) {
+		
+		//1. 요청 데이터 읽기 (전달인자로 대체)
+		if (commentNo == -1) {
+			return "fail";	// "fail" 문자열을 응답 (@ResponseBody 때문에)
+		}
+		
+		// 2. 데이터 처리
+		boardCommentService.deleteComment(commentNo);		
+		
+		return "success"; // "success" 문자열을 응답 (@ResponseBody 때문에)
+	}
+
+3. 삭제 기능 구현 - 서비스 구현
+
+   BoardCommentService 인터페이스
+
+   void deleteComment(int commentNo);
+
+-----------------
+
+   BoardCommentServiceImpl 클래스 구현
+
+@Override
+	public void deleteComment(int commentNo) {
+		
+		boardCommentMapper.deleteComment(commentNo);
+		
+	}
+
+4. 댓글 삭제 구현 -  Mapper 구현
+
+   BoardCommentMapper
+
+@Update("UPDATE tbl_boardcomment " +
+			"SET deleted = TRUE " +
+			"WHERE comment_no = #{ commentNo }")
+	void deleteComment(int commentNo);
+
+---------------------------------------
+
+5. 댓글 수정 구현
+
+   detail.html
+
+// 댓글 수정
+		// $('#comment-list .update-comment').on('click', function(event) {
+		$('#comment-list').on('click', '.update-comment', function(event) {
+			const commentNo = $(this).data('comment-no'); // $(this) : 이벤트 발생한 객체, .data('abc') : data-abc 값 읽기
+			
+			const editForm = $('#comment-edit-area-' + commentNo + ' form');
+			// alert(editForm.serialize());
+			
+			$.ajax({
+				"url": "update-comment",
+				"method": "post",
+				"data": editForm.serialize(),
+				"success": function(data) {
+					if (data == "success") {
+						$('#comment-list').load('comment-list?boardNo=' + [[${ board.boardNo }]]);
+					}
+				},
+				"error": function(xhr, status, err) {
+					alert('fail : ' + status);
+				}
+			});
+		});
+
+6. 댓글 수정 구현 - Controller
+
+   BoardCommentController
+
+
+@PostMapping(path = { "/update-comment" })
+	@ResponseBody
+	public String updateComment(BoardCommentDto comment) {
+		
+		boardCommentService.updateComment(comment);
+		
+		return "success";
+	}
+
+
+7. 댓글 수정 구현 - 서비스 구현
+
+   BoardCommentService 인터페이스
+
+void updateComment(BoardCommentDto comment);
+
+----------
+
+   BoardCommentServiceImpl 클래스
+
+@Override
+	public void updateComment(BoardCommentDto comment) {
+		
+		boardCommentMapper.updateComment(comment);
+		
+	}
+
+8. 댓글 수정 구현 - Mapper 구현
+
+   BoardCommentMapper 인터페이스
+
+@Update("UPDATE tbl_boardcomment " +
+			"SET content = #{ content } " +
+			"WHERE comment_no = #{ commentNo }")
+	void updateComment(BoardCommentDto comment);

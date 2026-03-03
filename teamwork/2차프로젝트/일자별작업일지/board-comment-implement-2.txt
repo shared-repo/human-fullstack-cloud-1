@@ -1,0 +1,163 @@
+5. 댓글 쓰기 구현 서비스 만들기 1
+
+   BoardCommentService 인터페이스 만들기
+
+import com.humanda6.demoweb2.dto.BoardCommentDto;
+
+public interface BoardCommentService {
+	
+	void writeComment(BoardCommentDto commentDto);
+
+void updateGroupNo(int commentNo, int groupNo);
+
+}
+
+6. 댓글 쓰기 구현 서비스 만들기 2
+
+   BoardCommentServiceImpl 클래스 만들기
+
+@Service("boardCommentService")
+public class BoardCommentServiceImpl implements BoardCommentService {
+
+	@Setter(onMethod_ = { @Autowired })
+	private BoardCommentMapper boardCommentMapper;
+	
+	@Override
+	public void writeComment(BoardCommentDto commentDto) {
+
+		boardCommentMapper.insertBoardComment(commentDto);
+		
+	}
+
+	@Override
+	public void updateGroupNo(int commentNo, int groupNo) {		
+		boardCommentMapper.updateGroupNo(commentNo, groupNo);		
+	}
+
+}
+
+
+7. 댓글 쓰기 구현 Mapper 만들기
+
+   BoardCommentMapper 인터페이스 만들기
+
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
+
+import com.humanda6.demoweb2.dto.BoardCommentDto;
+
+@Mapper
+public interface BoardCommentMapper {
+
+	// @Insert("sql") // ~Mapper.xml 파일의 내용을 대체
+	@Insert("INSERT INTO tbl_boardcomment (board_no, email, content, write_date, modify_date, deleted, group_no, step, depth) " +
+	           "VALUES (#{ boardNo }, #{ writer }, #{ content }, #{ writeDate }, #{ modifyDate }, #{ deleted }, -1, 1, 0)")
+	@Options(useGeneratedKeys = true, keyColumn = "comment_no", keyProperty = "commentNo")
+	void insertBoardComment(BoardCommentDto commentDto);
+
+              @Update("UPDATE tbl_boardcomment " +
+			"SET group_No = #{ groupNo } " +
+			"WHERE comment_No = #{ commentNo }")
+	void updateGroupNo(@Param("commentNo")int commentNo, @Param("groupNo")int groupNo);
+	
+}
+
+8. 댓글 쓰기 구현 컨트롤로 구현 수정
+
+   BoardCommentController
+
+	private BoardCommentService boardCommentService;
+	public BoardCommentController(BoardCommentService boardCommentService) {
+		this.boardCommentService = boardCommentService;
+	}
+	
+	@PostMapping(path = { "/write-comment" })
+	@ResponseBody // 메서드의 반환 값을 view의 이름으로 사용하지 않고 있는 그대로 응답하는 설정
+	public String writeComment(BoardCommentDto commentDto, @RequestParam("pageNo")int pageNo) {
+		// 1. 요청 데이터 읽기 ( 전달인자로 대체 )
+		System.out.println(commentDto);
+		// 2. 요청 처리
+		boardCommentService.writeComment(commentDto); // commentDto에 자동 증가된 commentNo가 저장됩니다.
+		// 최상위 댓글의 글번호를 그룹번호로 저장
+		boardCommentService.updateGroupNo(commentDto.getCommentNo(), commentDto.getCommentNo());		
+		// 3. View에서 읽을 수 있도록 데이터 저장		
+		// 4. View 또는 다른 컨터롤러로 이동
+		// return String.format("redirect:detail?boardNo=%d&pageNo=%d", commentDto.getBoardNo(), pageNo);
+		return "success";
+	}
+
+-------------------------------------------------
+
+9. 댓글 목록 보기 화면 수정
+
+   board/detail.html
+
+<!--  댓글 목록 영역 시작 -->
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="bgc-white p-20 bd">                  
+                  <div id="comment-list" class="mT-10">
+                  	
+                  </div>
+                </div>
+                </div>
+              </div>
+              <!-- 댓글 목록 영역 끝 -->
+
+10. 댓글 목록 보기 요청 구현
+
+    board/detail.html
+
+    // 1. #writecomment click 이벤트핸들러 위 
+    // # id="comment-list" 요소에 comment-list 요청 결과를 삽입 ( 비동기 )
+    $('#comment-list').load('comment-list?boardNo=' + [[${ board.boardNo }]]); 
+
+    // 2. #writecomment click 이벤트핸들러 중간
+"success": function(data, status, xhr) {
+    if (data == "success") {
+        // alert('댓글을 등록했습니다.');
+        $('#comment-list').load('comment-list?boardNo=' + [[${ board.boardNo }]]);
+        $('#commentform textarea').val("");
+    }
+},
+
+11. 댓글 목록 보기 컨트롤러 구현
+
+    BoardCommentController 수정
+
+@GetMapping(path = { "/comment-list" })
+	public String showCommentList(@RequestParam("boardNo") int boardNo, Model model) {
+		
+		List<BoardCommentDto> comments = boardCommentService.findBoardCommentByBoardNo(boardNo);
+		
+		// View에서 읽을 수 있도록 데이터 저장
+		model.addAttribute("comments", comments);
+		
+		return "board/comment-list"; //  
+	}
+
+
+12. 댓글 목록 보기 서비스 구현 
+
+     BoardCommentService 인터페이스 수정
+
+List<BoardCommentDto> findBoardCommentByBoardNo(int boardNo);
+
+     BoardCommentServiceImpl 클래스 수정
+
+@Override
+	public List<BoardCommentDto> findBoardCommentByBoardNo(int boardNo) {
+		List<BoardCommentDto> comments = boardCommentMapper.selectCommentByBoardNo(boardNo);
+		return comments;
+	}
+
+13. 댓글 목록 보기 Mapper 구현
+
+    BoardCommentMapper 인터페이스 수정
+
+@Select("SELECT comment_no, email writer, content, write_date, modify_date, deleted, group_no, step, depth " +
+			"FROM tbl_boardcomment " +
+			"WHERE board_no = #{ boardNo } " +
+			"ORDER BY group_no DESC, step ASC")
+	List<BoardCommentDto> selectCommentByBoardNo(int boardNo);

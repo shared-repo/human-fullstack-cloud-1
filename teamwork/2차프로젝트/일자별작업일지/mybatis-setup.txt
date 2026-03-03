@@ -1,0 +1,39 @@
+1. 라이브러리 추가
+
+   build.gradle
+
+implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:4.0.1'
+
+
+2. datasource 설정
+
+   application.properties
+
+spring.datasource.hikari.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.hikari.jdbc-url=jdbc:mysql://localhost:3306/demoweb3?serverTimezone=Asia/Seoul
+spring.datasource.hikari.username=root
+spring.datasource.hikari.password=mysql
+spring.datasource.hikari.connection-test-query=SELECT 1
+
+3. 설정 클래스 구현
+
+   DatabaseConfig.java
+
+
+4, mybatis 설정
+
+   application.properties
+
+mybatis.configuration.map-underscore-to-camel-case=true
+mybatis.type-aliases-package=com.humanda6.demoweb2.dto
+
+spring.main.allow-bean-definition-overriding=true
+
+5. Mapper 구현 ( 업무별로 각각 작성 )
+
+   ~mapper.xml 파일 작성
+
+   ~Mapper.java 파일 작성
+
+6. ~Service 구현
+

@@ -1,0 +1,118 @@
+1. 패키지 (라이브러리) 준비
+
+   build.gradle 파일 수정
+
+implementation 'org.springframework.boot:spring-boot-starter-security'
+implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.3.RELEASE'
+
+
+2. 인증 프로세스 설정
+
+   com.humanda6.demoweb2.config.DemoWebSecurityConfig 클래스 추가
+
+
+package com.humanda6.demoweb2.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+@EnableWebSecurity
+public class DemoWebSecurityConfig {
+
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+		// 1 - 1.
+		http.csrf(AbstractHttpConfigurer::disable)
+			.authorizeHttpRequests(
+				(authorize) -> authorize.requestMatchers("/", "/home").permitAll()
+									     .requestMatchers("/auth/**").permitAll()
+									     .requestMatchers("/main.js", "/image/**", "/styles/**", "/assets/**").permitAll()
+									     .anyRequest().authenticated())
+			.httpBasic(Customizer.withDefaults())
+			.formLogin(Customizer.withDefaults());
+		
+		return http.build();
+
+	}
+
+}
+
+3. 실행 및 확인 1
+
+   로그인 화면 표시되면 
+   - 아이디는 : user 
+   - 패스워드 : 이클립스에서 스프링부트 애플리케이션 실행 후 콘솔 로그에 표시되는 패스워드 사용해서 로그인
+
+
+4. 아이디 패스워드 설정
+
+   application.properties
+
+spring.security.user.name=iamuserone
+spring.security.user.password=iamuserone
+
+
+
+4-1.  실행 및 확인 2
+
+   로그인 화면 표시되면 
+   - 아이디는 : iamuserone 
+   - 패스워드 : iamuserone
+
+
+
+5. 인증 과정 커스터마이징
+
+   DemoWebSecurityConfig.java 파일 수정
+
+//                        // 1 - 1.
+//		http.csrf(AbstractHttpConfigurer::disable)
+//			.authorizeHttpRequests(
+//				(authorize) -> authorize.requestMatchers("/", "/home").permitAll()
+//										.requestMatchers("/auth/**").permitAll()
+//										.requestMatchers("/main.js", "/image/**", "/styles/**", "/assets/**").permitAll()
+//										.anyRequest().authenticated())
+//			.httpBasic(Customizer.withDefaults())
+//			.formLogin(Customizer.withDefaults());
+		
+		// 1 - 2.
+		http.csrf(AbstractHttpConfigurer::disable)
+			.authorizeHttpRequests(
+				(authorize) -> authorize.requestMatchers("/board/**").authenticated()
+										.anyRequest().permitAll())
+			.httpBasic(AbstractHttpConfigurer::disable)
+			.formLogin(form -> form.loginPage("/auth/signin")
+								   .usernameParameter("email")
+								   .passwordParameter("passwd"));
+
+
+
+6. 로그인 페이지 일부 수정
+
+   auth/signin.html
+
+(입력요소의 type을 email에서 text로 변경)
+<input type="text" name="email" class="form-control" placeholder="John Doe">
+
+
+7. 실행 및 확인
+
+   실행 후 게시판 클릭
+   로그인 화면 표시되면 
+   - 아이디는 : user 
+   - 패스워드 : 이클립스에서 스프링부트 애플리케이션 실행 후 콘솔 로그에 표시되는 패스워드 사용해서 로그인
+
+
+
+
+
+
+
+
