@@ -1,0 +1,213 @@
+1. 패키지 추가
+
+   com.humanda6.demoweb2.security
+
+2. 패스워드인코더 구현
+
+   1에서 만든 패키지에 DemoWebPasswrodEncoder 클래스 생성 후 아래 코드 적용
+
+package com.humanda6.demoweb2.security;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+public class DemoWebPasswordEncoder implements PasswordEncoder {
+
+	private static final String ALGORITHM = "SHA-256";
+	
+	@Override
+	public String encode(CharSequence rawPassword) {
+		String passwd = rawPassword.toString();
+		// return Util.getHashedString(passwd, ALGORITHM);
+		return passwd;
+	}
+
+	@Override
+	public boolean matches(CharSequence rawPassword, String encodedPassword) {
+//		String hashedPassword = Util.getHashedString(rawPassword.toString(), ALGORITHM);
+//		return hashedPassword.equals(encodedPassword);
+		
+		return encodedPassword.equals(rawPassword.toString());
+	}
+	
+}
+
+3. RoleDto 클래스 만들고 아래 코드 적용
+
+package com.humanda6.demoweb2.dto;
+
+import lombok.Data;
+
+@Data
+public class RoleDto {
+
+	private int roleNo;
+	private String roleName;
+	private String roleDesc;
+	
+}
+
+
+4. MemberDto 클래스 수정
+
+@Data // 모든 변수에 대해 getter, setter를 자동으로 생성
+public class MemberDto {
+	
+	private String userName;
+	private String email;
+	private String passwd;
+	
+	private List<RoleDto> roles; // 추가된 내용
+
+}
+
+5. RoleEntity 클래스 만들고 아래 코드 적용
+
+package com.humanda6.demoweb2.entity;
+
+import java.util.Set;
+
+import com.humanda6.demoweb2.dto.RoleDto;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
+import lombok.Data;
+
+@Data
+@Entity
+@Table(name = "tbl_role")
+public class RoleEntity {
+	
+	public RoleEntity(RoleDto role) {
+		this.roleNo = role.getRoleNo();
+		this.roleName = role.getRoleName();
+		this.roleDesc = role.getRoleDesc();
+	}
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int roleNo;
+	
+	@Column
+	private String roleName;
+	
+	@Column 
+	private String roleDesc;
+
+	@ManyToMany(mappedBy = "roles")
+	private Set<MemberEntity> members;
+
+	public RoleDto toRoleDto() {
+		RoleDto role = new RoleDto();
+		role.setRoleNo(roleNo);
+		role.setRoleName(roleName);
+		role.setRoleDesc(roleDesc);
+		
+		return role;
+	}
+		
+}
+
+6. MemberEntity 클래스 수정
+
+	// DTO를 사용해서 Entity를 만드는 역할
+	public MemberEntity(MemberDto memberDto) {
+		email = memberDto.getEmail();
+		passwd = memberDto.getPasswd();
+		userName = memberDto.getUserName();
+		
+		if (memberDto.getRoles() != null) {
+			List<RoleDto> roles = memberDto.getRoles();
+			this.roles = roles.stream().map(role -> new RoleEntity(role)).toList();
+		} else {
+			this.roles = new ArrayList<RoleEntity>();
+		}
+	}
+
+	-----------------------
+
+	@ManyToMany
+	@JoinTable(
+		name = "tbl_member_role",
+		joinColumns = @JoinColumn(name = "email"),
+		inverseJoinColumns = @JoinColumn(name = "roleNo")
+	)
+	private List<RoleEntity> roles;
+	
+	
+	// Entity -> DTO 만드는 역할
+	public MemberDto toMemberDto() {
+		MemberDto member = new MemberDto();
+		member.setEmail(email);
+		member.setUserName(userName);
+		member.setPasswd(passwd);
+		
+		List<RoleDto> roles2 = roles.stream().map(role -> role.toRoleDto()).toList();
+		member.setRoles(roles2);
+		
+		return member;
+	}
+
+
+7. 실행 후 mysqlworkbench 실행해서 테이블 확인
+
+   tbl_member_role 테이블 생성 확인
+
+
+8. 데이터 삽입
+
+   mysqlworkbench에서 아래 sql 실행 ( 데이터는 실행되는 컴퓨터의 상황에 맞게 수정 )
+
+use demoweb3;
+
+insert into tbl_role (role_name, role_desc) values ('user', 'general user');
+insert into tbl_role (role_name, role_desc) values ('admin', 'general admin'); 
+
+select * from tbl_member;
+
+insert into tbl_member_role values (1, 'iamuserone@example.com');
+insert into tbl_member_role values (1, 'iamusertwo@example.com');
+
+
+9. DemoWebUserDetailsService 클래스 만들고 아래 코드 적용
+
+package com.humanda6.demoweb2.security;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+import com.humanda6.demoweb2.dto.MemberDto;
+import com.humanda6.demoweb2.dto.RoleDto;
+import com.humanda6.demoweb2.mapper.MemberMapper;
+
+import lombok.Setter;
+
+public class DemoWebUserDetailsService implements UserDetailsService {
+
+	@Setter(onMethod_ = { @Autowired })
+	private MemberMapper memberMapper;
+	
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		
+		DemoWebUserDetails userDetails = null;
+		MemberDto member = memberMapper.selectMemberByEmail(username);
+		if (member == null) {
+			throw new UsernameNotFoundException(username);
+		} else {
+			List<RoleDto> roles = memberMapper.selectRolesByEmail(username);
+			member.setRoles(roles);
+			userDetails = new DemoWebUserDetails(member);
+			return userDetails;
+		}
+	}
+
+}
