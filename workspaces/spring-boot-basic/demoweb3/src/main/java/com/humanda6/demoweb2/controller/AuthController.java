@@ -1,5 +1,8 @@
 package com.humanda6.demoweb2.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.humanda6.demoweb2.dto.MemberDto;
+import com.humanda6.demoweb2.dto.RoleDto;
 import com.humanda6.demoweb2.service.AuthService;
 
 import jakarta.servlet.http.HttpSession;
@@ -28,6 +32,12 @@ public class AuthController {
 		
 		//1. 요청 데이터 읽기 ( 메서드의 전달인자로 수신 )
 		System.out.println(member); // python의 print 함수와 같은 기능 수행
+		
+		List<RoleDto> roles = new ArrayList<RoleDto>();
+		RoleDto role = new RoleDto();
+		role.setRoleNo(1);
+		roles.add(role);
+		member.setRoles(roles);
 		
 		//2. 데이터 처리 ( 서비스 객체에 요청 )
 		// AuthService authService = new AuthService(); // 파이썬 구현 --> authService = AuthService()

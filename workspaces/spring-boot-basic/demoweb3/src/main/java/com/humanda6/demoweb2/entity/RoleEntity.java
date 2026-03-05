@@ -18,6 +18,7 @@ import lombok.Data;
 @Table(name = "tbl_role")
 public class RoleEntity {
 	
+	public RoleEntity() {}
 	public RoleEntity(RoleDto role) {
 		this.roleNo = role.getRoleNo();
 		this.roleName = role.getRoleName();

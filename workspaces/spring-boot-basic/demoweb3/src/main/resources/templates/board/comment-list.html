@@ -17,7 +17,7 @@
 									    <span th:text="${ #strings.replace(comment.content, '
 ', '<br>') }"></span>
 										<br /><br />
-										<div th:style='${ (session.loginuser != null && session.loginuser.email == comment.writer) ? "display:block" : "display:none" }'>
+										<div th:style='${ (#authorization.expression("isAuthenticated()") && #authentication.principal.Username == comment.writer) ? "display:block" : "display:none" }'>
 									    	<a class="edit-comment" th:data-comment-no="${ comment.commentNo }" href="javascript:">편집</a>
 											&nbsp;
 											<a class="delete-comment" th:data-comment-no="${ comment.commentNo }" href="javascript:">삭제</a>

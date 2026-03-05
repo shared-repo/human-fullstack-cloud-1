@@ -16,6 +16,4 @@
    스프링 시큐리티 적용을 위한 
    - 커스터마이징 구현 : DemoWebPasswordEncoder, DemoWebUserDetails, DemoWebUserDetailsService
    - entity, dto 구현 : MemberEntity, MemberDto, RoleEntity, RoleDto
-
-
-3. 중간발표
+   - html 수정

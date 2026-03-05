@@ -1,10 +1,13 @@
 package com.humanda6.demoweb2.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.humanda6.demoweb2.dao.AuthDao;
 import com.humanda6.demoweb2.dto.MemberDto;
+import com.humanda6.demoweb2.dto.RoleDto;
 import com.humanda6.demoweb2.entity.MemberEntity;
 import com.humanda6.demoweb2.mapper.MemberMapper;
 import com.humanda6.demoweb2.repository.MemberRepository;
@@ -38,6 +41,11 @@ public class AuthService {
 		
 		// 3. mybatis 사용
 		memberMapper.insertMember(member);
+		
+		List<RoleDto> roles = member.getRoles();
+		for (RoleDto role : roles) {
+			memberMapper.insertMemberRole(member.getEmail(), role.getRoleNo());
+		}
 		
 	}
 

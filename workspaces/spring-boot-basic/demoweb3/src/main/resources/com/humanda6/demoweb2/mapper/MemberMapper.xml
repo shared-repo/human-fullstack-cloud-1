@@ -13,5 +13,31 @@
         FROM tbl_member
         WHERE email = #{email} AND passwd = #{passwd}
     </select>
+    
+    <select id="selectAllRoles" resultType="RoleDto">
+    	SELECT role_no, role_name, role_desc
+    	FROM tbl_role
+    </select>
+    
+    <select id="selectMemberByEmail" parameterType="string" resultType="MemberDto">
+        SELECT email, user_name, passwd
+        FROM tbl_member
+        WHERE email = #{email}
+    </select>
+    
+    <insert id="insertMemberRole" parameterType="hashmap">
+    	INSERT INTO tbl_member_role (email, role_no)
+    	VALUES (#{email}, #{roleNo})
+    </insert>
+    
+    <select id="selectRolesByEmail" parameterType="String" resultType="RoleDto">
+    	SELECT r.role_no, r.role_name
+    	FROM tbl_member m
+    	INNER JOIN tbl_member_role mr
+    	ON m.email = mr.email
+    	INNER JOIN tbl_role r
+    	ON mr.role_no = r.role_no
+    	WHERE m.email = #{ email }
+    </select>
 
 </mapper>

@@ -96,7 +96,7 @@
                       </div>
                       <div class="mb-3">
                         <label class="form-label" for="writer">작성자(email)</label>
-                        <input type="text" class="form-control" id="writer" name="writer.email" readonly th:value="${ session.loginuser.email }">
+                        <input type="text" class="form-control" id="writer" name="writer.email" readonly th:value="${ #authentication.principal.Username }">
                       </div>
                        
                       <div class="mb-3">
